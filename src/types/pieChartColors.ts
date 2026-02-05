@@ -1,0 +1,3 @@
+export const COLORS_DARK_THEME = ["#C53DD8", "#A926BB", "#5C1466", "#6C5A09", "#BD9E10", "#CAA811", "#ECC722"];
+
+export const COLORS_LIGHT_THEME = ["#D166E0", "#D011E0", "#A926BB", "#AAAA55", "#BFBF40", "#D5D52B", "#DFDF20"];

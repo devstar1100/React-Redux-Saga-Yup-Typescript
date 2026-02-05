@@ -1,0 +1,17 @@
+export const simulatedModelInitialState = {
+  simulationName: "",
+  modelClassName: "",
+  modelAlias: "",
+  systemModelType: false,
+  parentSystem: "",
+  modelSource: "Sds generic model",
+  highLevelModel: "",
+  hasFormalInterfaces: false,
+  hardwareModel: "",
+  hardwareInterfaceType: "Not applicable",
+  modelFrequency: "",
+  stepsPerTick: "1",
+  plurality: "1",
+  inputDataAge: "",
+  executionGroupOrder: "",
+};

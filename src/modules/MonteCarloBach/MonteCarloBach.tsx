@@ -13,7 +13,7 @@ import { searchMatch } from "../../lib/searchMatch";
 import PageLoader from "../../components/PageLoader/PageLoader";
 import { getSelectedFilters, hasAnyLength } from "../../lib/tableFilterHelpers";
 import { ActiveFilter, CloseBtn } from "../../components/Tables/CheckboxTable/components/ActiveFilter";
-import { formatSimulationRow } from "./lib/MonteCarloBatchRowMapper";
+import { formatMonteCarloBatchRow } from "./lib/MonteCarloBatchRowMapper";
 import { getAreSimulationsLoading, getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
 import { getEnumeratorsServer, getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
 import { pages } from "../../lib/routeUtils";
@@ -43,7 +43,6 @@ const MonteCarloBach = () => {
   const simulationsServerLoading = useSelector(getAreSimulationsLoading);
   const simulationListServer: Simulation[] = useSelector(getSimulations);
   const rowsServer: MonteCarloBatch[] = useSelector(getMonteCarloBatches);
-  const enumerators = useSelector(getEnumerators);
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>("");
   const [page, setPage] = useState<number>(1);
@@ -130,7 +129,7 @@ const MonteCarloBach = () => {
     selectedTableElements.forEach((row) => dispatch(action({ "batch-id": row.id as number })));
   };
 
-  const handleCloneSimulations = () => {
+  const handleCloneMonteCarloBatches = () => {
     selectedTableElements.forEach((row) => {
       const MonteCarloBatch = rowsServer.find((el) => el["batch-id"] === row.id);
       dispatch(cloneMonteCarloBatchServer({ ...(MonteCarloBatch as MonteCarloBatch) }));
@@ -139,17 +138,6 @@ const MonteCarloBach = () => {
 
   const clearAllFilters = () => {
     setSimulationNameFilters({ ...simulationNameFilters, filters: [] });
-  };
-
-  const getEnumeratorValues = (key: string) => {
-    const values = enumerators
-      .find((el) => el["enum-type"] === key)
-      ?.["enum-values"].map((value) => ({
-        text: value["enum-value-string"],
-        value: value["enum-value-string"],
-      })) as FilterVariantValue[];
-
-    return values || [];
   };
 
   useEffect(() => {
@@ -162,7 +150,7 @@ const MonteCarloBach = () => {
     if (!simulationListServer.length) return;
     if (!rowsServer.length) return;
     const newRowsServer = addSimulationNameToRowsServer(simulationListServer, rowsServer);
-    const rows: Row[] = formatSimulationRow(newRowsServer, navigate, simulationNameFilters);
+    const rows: Row[] = formatMonteCarloBatchRow(newRowsServer, navigate);
     setRows(rows);
     const simulationNames = newRowsServer.map((simulation) => simulation["simulation-name"]);
     const simulationNameVariants = simulationNames.filter((value, index, self) => self.indexOf(value) === index);
@@ -175,7 +163,7 @@ const MonteCarloBach = () => {
         values: newValues,
       },
     });
-  }, [rowsServer, simulationListServer, simulationNameFilters]);
+  }, [rowsServer, simulationListServer]);
 
   return (
     <Wrapper>
@@ -233,11 +221,11 @@ const MonteCarloBach = () => {
           <FooterActions>
             <SelectedCount>{selectedTableElements.length} Item Selected</SelectedCount>
             <Buttons>
-              <Button color="blue" onClick={handleCloneSimulations}>
-                Clone selected simulation
+              <Button color="blue" onClick={handleCloneMonteCarloBatches}>
+                Clone selected batches
               </Button>
               <Button color="red" onClick={handleActionCustomViews(deleteMonteCarloBatchServer)}>
-                Delete selected simulations
+                Delete selected batches
               </Button>
             </Buttons>
           </FooterActions>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router";
 import withSimulation from "../../hocs/withSimulation";
@@ -15,11 +15,7 @@ import { getSelectedFilters, hasAnyLength } from "../../lib/tableFilterHelpers";
 import { ActiveFilter, CloseBtn } from "../../components/Tables/CheckboxTable/components/ActiveFilter";
 import { formatSimulationRow } from "./lib/MonteCarloBatchRowMapper";
 import { getAreSimulationsLoading, getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
-import {
-  getEnumeratorsServer,
-  getSimulationsExtendedInfoServer,
-  updateAreSimulationsLoading,
-} from "../../redux/actions/simulationsActions";
+import { getEnumeratorsServer, getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
 import { pages } from "../../lib/routeUtils";
 import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
@@ -43,8 +39,8 @@ interface MonteCarloBatchVariants {
 const MonteCarloBach = () => {
   const dispatch = useDispatch();
 
-  const isLoading = useSelector(getAreMonteCarloBatchesLoading);
-  const Loading = useSelector(getAreSimulationsLoading);
+  const monteCarloBatchServerLoading = useSelector(getAreMonteCarloBatchesLoading);
+  const simulationsServerLoading = useSelector(getAreSimulationsLoading);
   const simulationListServer: Simulation[] = useSelector(getSimulations);
   const rowsServer: MonteCarloBatch[] = useSelector(getMonteCarloBatches);
   const enumerators = useSelector(getEnumerators);
@@ -195,7 +191,7 @@ const MonteCarloBach = () => {
         </AddConfigurationWrapper>
       </TableHeader>
       <TableBody>
-        {Loading ? (
+        {monteCarloBatchServerLoading || simulationsServerLoading ? (
           <Box p="100px 0">
             <PageLoader />
           </Box>

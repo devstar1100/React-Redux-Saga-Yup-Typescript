@@ -35,6 +35,7 @@ import AddEditSimulatedSystems from "./modules/AddEditSimulatedSystems/AddEditSi
 import AddEditModelOutput from "./modules/AddEditModelOutput/AddEditModelOutput";
 import AddEditModelInput from "./modules/AddEditModelInput/AddEditModelInput";
 import MonteCarloBach from "./modules/MonteCarloBach/MonteCarloBach";
+import AddEditMonteCarloBatch from "./modules/AddEditMonteCarloBatch/AddEditMonteCarloBatch";
 
 const Router = () => {
   return (
@@ -65,7 +66,11 @@ const Router = () => {
           <Route path={`${pages.modifyConfigurationFile()}`} element={<AddConfigurationFile pageMode={"create"} />} />
           <Route path={pages.simulationUsers()} element={<SimulationUsers />} />
           <Route path={pages.simulationCatalogue()} element={<SimulationCatalogue />} />
+
           <Route path={pages.monteCarloBatch()} element={<MonteCarloBach />} />
+          <Route path={pages.createMonteCarloBatch()} element={<AddEditMonteCarloBatch />} />
+          <Route path={`${pages.editMonteCarloBatch()}/:batchId`} element={<AddEditMonteCarloBatch isEditMode />} />
+
           <Route path={pages.createSimulationUser()} element={<AddEditSimulationUser />} />
           <Route path={`${pages.editSimulationUser()}/:userId`} element={<AddEditSimulationUser isEditMode />} />
           <Route path={`${pages.customViewsList()}`} element={<CustomViewsList />} />

@@ -1,9 +1,7 @@
-import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router";
-
 import withSimulation from "../../hocs/withSimulation";
-
 import Input from "../../components/Inputs/Input";
 import SearchIcon from "../../components/Icons/SearchIcon";
 import Button from "../../components/Button/Button";
@@ -15,21 +13,19 @@ import { searchMatch } from "../../lib/searchMatch";
 import PageLoader from "../../components/PageLoader/PageLoader";
 import { getSelectedFilters, hasAnyLength } from "../../lib/tableFilterHelpers";
 import { ActiveFilter, CloseBtn } from "../../components/Tables/CheckboxTable/components/ActiveFilter";
-import { formatSimulationRow } from "./lib/simulationRowMapper";
+import { formatSimulationRow } from "./lib/MonteCarloBatchRowMapper";
 import { getAreSimulationsLoading, getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
-import { getEnumeratorsServer, getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
-import { cloneSimulationServer, deleteSimulationServer } from "../../redux/actions/simulationActions";
-import { Simulation } from "../../types/simulations";
+import {
+  getEnumeratorsServer,
+  getSimulationsExtendedInfoServer,
+  updateAreSimulationsLoading,
+} from "../../redux/actions/simulationsActions";
 import { pages } from "../../lib/routeUtils";
-import useTableFilter from "../../hooks/useTableFilter";
-import { getSimulationUsers } from "../../redux/reducers/simulationUsersReducer";
-import { SimulationUser } from "../../types/simulationUser";
-import { getSimulationUsersServer } from "../../redux/actions/simulationUsersActions";
-import { getIsHydrated } from "../../redux/reducers/appReducer";
 import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
-import { getMonteCarloBatches } from "../../redux/reducers/monteCarloBatchesReducer";
-import { log } from "node:console";
+import { getAreMonteCarloBatchesLoading, getMonteCarloBatches } from "../../redux/reducers/monteCarloBatchesReducer";
+import { cloneMonteCarloBatchServer, deleteMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
+import { Simulation } from "../../types/simulations";
 
 interface FilterVariantValue {
   text: string;
@@ -40,24 +36,19 @@ interface FilterVariant {
   values: FilterVariantValue[];
 }
 
-interface SimulationVariants {
-  statusVariants: FilterVariant;
-  projectVariants: FilterVariant;
+interface MonteCarloBatchVariants {
+  simulationNameVariants: FilterVariant;
 }
 
 const MonteCarloBach = () => {
   const dispatch = useDispatch();
 
-  const rowsServer = useSelector(getSimulations);
+  const isLoading = useSelector(getAreMonteCarloBatchesLoading);
+  const Loading = useSelector(getAreSimulationsLoading);
+  const simulationListServer: Simulation[] = useSelector(getSimulations);
+  const rowsServer: MonteCarloBatch[] = useSelector(getMonteCarloBatches);
   const enumerators = useSelector(getEnumerators);
-  const isLoading = useSelector(getAreSimulationsLoading);
-  const simulationUsers: SimulationUser[] = useSelector(getSimulationUsers);
-  const monteCarloBatchesServer: MonteCarloBatch[] = useSelector(getMonteCarloBatches);
-  console.log("monteCarloBatches", monteCarloBatchesServer);
-  const isHydrated = useSelector(getIsHydrated);
-
   const navigate = useNavigate();
-
   const [searchValue, setSearchValue] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [rows, setRows] = useState<Row[]>([]);
@@ -66,37 +57,32 @@ const MonteCarloBach = () => {
     direction: "top",
   });
 
-  const [simulationOwnerFilters, simulationOwnerVariants, setSimulationOwnerFilters, setSimulationOwnerVariants] =
-    useTableFilter({
-      tableColIndex: 2,
+  const [simulationNameFilters, setSimulationNameFilters] = useState<Filter>({
+    index: 0,
+    filters: [],
+  });
+
+  const [filterVariants, setFilterVariants] = useState<MonteCarloBatchVariants>({
+    simulationNameVariants: {
+      values: [],
+    },
+  });
+
+  const addSimulationNameToRowsServer = (
+    simulationListServer: Simulation[],
+    rowsServer: MonteCarloBatch[],
+  ): MonteCarloBatch[] => {
+    return rowsServer.map((row) => {
+      const simulation = simulationListServer.find((sim) => sim["simulation-id"] === row["simulation-id"]);
+
+      if (!simulation) return row;
+
+      return {
+        ...row,
+        "simulation-name": simulation["simulation-name"],
+      };
     });
-
-  const [statusFilters, setStatusFilters] = useState<Filter>({
-    index: 3,
-    filters: [],
-  });
-
-  const [projectFilters, setProjectFilters] = useState<Filter>({
-    index: 1,
-    filters: [],
-  });
-
-  const [filterVariants, setFilterVariants] = useState<SimulationVariants>({
-    statusVariants: {
-      values: [],
-    },
-    projectVariants: {
-      values: [],
-    },
-  });
-
-  const simulationOwners = simulationUsers.map((user) => user["user-name"]);
-
-  useEffect(() => {
-    if (isHydrated) {
-      dispatch(getSimulationUsersServer({}));
-    }
-  }, [isHydrated]);
+  };
 
   const rowsPerPage = 10;
 
@@ -121,29 +107,19 @@ const MonteCarloBach = () => {
   };
 
   const filterRows = (el: Row) => {
-    if (searchValue && !searchMatch(el.cells[0].text as string, searchValue)) return false;
+    if (
+      searchValue &&
+      !searchMatch(el.cells[0].text as string, searchValue) &&
+      !searchMatch(el.cells[1].text as string, searchValue)
+    )
+      return false;
 
-    if (projectFilters.filters.length) {
+    if (simulationNameFilters.filters.length) {
       let availableFilter;
 
-      for (let filter of projectFilters.filters) {
+      for (let filter of simulationNameFilters.filters) {
         filter = filter.toLowerCase();
-        if (filter == (el.cells[projectFilters.index].text as string).toLowerCase?.()) availableFilter = true;
-      }
-
-      if (!availableFilter) return false;
-    }
-
-    if (simulationOwnerFilters.filters.length) {
-      let availableFilter;
-
-      for (let filter of simulationOwnerFilters.filters) {
-        const ownerFilter = filter;
-        const a = ownerFilter;
-        const b = (el.cells[2].text as string).toLowerCase?.();
-
-        const isOwnerMatch = a === b;
-        if (isOwnerMatch) availableFilter = true;
+        if (filter == (el.cells[simulationNameFilters.index].text as string).toLowerCase?.()) availableFilter = true;
       }
 
       if (!availableFilter) return false;
@@ -154,20 +130,19 @@ const MonteCarloBach = () => {
 
   const selectedTableElements = rows.filter(filterRows).filter((elem) => elem.checked);
 
-  const handleActionCustomViews = (action: (props: Pick<Simulation, "simulation-id">) => any) => () => {
-    selectedTableElements.forEach((row) => dispatch(action({ "simulation-id": row.id as number })));
+  const handleActionCustomViews = (action: (props: Pick<MonteCarloBatch, "batch-id">) => any) => () => {
+    selectedTableElements.forEach((row) => dispatch(action({ "batch-id": row.id as number })));
   };
 
   const handleCloneSimulations = () => {
     selectedTableElements.forEach((row) => {
-      const simulation = rowsServer.find((el) => el["simulation-id"] === row.id);
-      dispatch(cloneSimulationServer({ ...(simulation as Simulation) }));
+      const MonteCarloBatch = rowsServer.find((el) => el["batch-id"] === row.id);
+      dispatch(cloneMonteCarloBatchServer({ ...(MonteCarloBatch as MonteCarloBatch) }));
     });
   };
 
   const clearAllFilters = () => {
-    setStatusFilters({ ...statusFilters, filters: [] });
-    setProjectFilters({ ...projectFilters, filters: [] });
+    setSimulationNameFilters({ ...simulationNameFilters, filters: [] });
   };
 
   const getEnumeratorValues = (key: string) => {
@@ -188,36 +163,23 @@ const MonteCarloBach = () => {
   }, []);
 
   useEffect(() => {
-    if (!monteCarloBatchesServer) return;
-    const rows: Row[] = formatSimulationRow(rowsServer, navigate, statusFilters);
-
-    const newValues = simulationOwners.map((el) => ({
+    if (!simulationListServer.length) return;
+    if (!rowsServer.length) return;
+    const newRowsServer = addSimulationNameToRowsServer(simulationListServer, rowsServer);
+    const rows: Row[] = formatSimulationRow(newRowsServer, navigate, simulationNameFilters);
+    setRows(rows);
+    const simulationNames = newRowsServer.map((simulation) => simulation["simulation-name"]);
+    const simulationNameVariants = simulationNames.filter((value, index, self) => self.indexOf(value) === index);
+    const newValues = simulationNameVariants.map((el) => ({
       text: el,
       value: el,
     }));
-
-    setSimulationOwnerVariants({
-      values: newValues,
-    });
-
-    setRows(rows);
-  }, [monteCarloBatchesServer, statusFilters]);
-
-  useEffect(() => {
-    if (!enumerators) return;
-
-    const statusVariants = getEnumeratorValues("simulation-statuses");
-    const projectVariants = getEnumeratorValues("projects");
-
     setFilterVariants({
-      statusVariants: {
-        values: statusVariants,
-      },
-      projectVariants: {
-        values: projectVariants,
+      simulationNameVariants: {
+        values: newValues,
       },
     });
-  }, [enumerators]);
+  }, [rowsServer, simulationListServer, simulationNameFilters]);
 
   return (
     <Wrapper>
@@ -233,7 +195,7 @@ const MonteCarloBach = () => {
         </AddConfigurationWrapper>
       </TableHeader>
       <TableBody>
-        {isLoading ? (
+        {Loading ? (
           <Box p="100px 0">
             <PageLoader />
           </Box>
@@ -242,17 +204,15 @@ const MonteCarloBach = () => {
             <Filters>
               <TableFilter
                 text="simulation Name"
-                filters={statusFilters.filters}
-                variants={filterVariants.statusVariants}
-                setFilters={setStatusFilters}
+                filters={simulationNameFilters.filters}
+                variants={filterVariants.simulationNameVariants}
+                setFilters={setSimulationNameFilters}
               />
             </Filters>
 
             <ActiveFilters>
-              {getSelectedFilters(statusFilters, setStatusFilters)}
-              {getSelectedFilters(projectFilters, setProjectFilters)}
-              {getSelectedFilters(simulationOwnerFilters, setSimulationOwnerFilters)}
-              {hasAnyLength(statusFilters, projectFilters, simulationOwnerFilters) && (
+              {getSelectedFilters(simulationNameFilters, setSimulationNameFilters)}
+              {hasAnyLength(simulationNameFilters) && (
                 <ActiveFilter>
                   Clear all filters <CloseBtn onClick={clearAllFilters} />
                 </ActiveFilter>
@@ -280,7 +240,7 @@ const MonteCarloBach = () => {
               <Button color="blue" onClick={handleCloneSimulations}>
                 Clone selected simulation
               </Button>
-              <Button color="red" onClick={handleActionCustomViews(deleteSimulationServer)}>
+              <Button color="red" onClick={handleActionCustomViews(deleteMonteCarloBatchServer)}>
                 Delete selected simulations
               </Button>
             </Buttons>
@@ -307,7 +267,7 @@ const headers: Header[] = [
   {
     text: "Number of Runs",
     align: "center",
-    filterable: true,
+    filterable: false,
     width: 14,
   },
   {

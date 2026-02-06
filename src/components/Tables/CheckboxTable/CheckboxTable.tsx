@@ -136,8 +136,8 @@ const CheckboxTable: FC<Props> = ({
           </TableRow>
         </TableHead>
         <TableBody isWithCheckboxes={isWithCheckboxes}>
-          {currentRows.map((row) => (
-            <TableRow key={row.id}>
+          {currentRows.map((row, index) => (
+            <TableRow key={index}>
               {isWithCheckboxes && (
                 <TableCell padding="checkbox">
                   <Checkbox
@@ -186,7 +186,7 @@ const TableHead = styled(MuiTableHead)<{ isWithCheckboxes: boolean }>(({ theme, 
     padding: "6px 12px",
     fontWeight: theme.typography.h6.fontWeight,
 
-    "&:first-child": {
+    "&:first-of-type": {
       padding: isWithCheckboxes ? "0" : "6px 12px",
       minWidth: isWithCheckboxes ? "44px" : "0",
       borderRadius: "9px 0 0 0",
@@ -208,7 +208,7 @@ const TableBody = styled(MuiTableBody)<{ isWithCheckboxes: boolean }>(({ theme, 
     borderBottom: "1px solid #454545",
     padding: "6px 12px",
 
-    "&:first-child": {
+    "&:first-of-type": {
       padding: isWithCheckboxes ? "0" : "6px 12px",
       minWidth: isWithCheckboxes ? "44px" : "0",
       backgroundColor: theme.palette.main[700],
@@ -268,7 +268,7 @@ const Pagination = styled(MuiPagination)(({ theme }) => ({
     justifyContent: "center",
     alignItems: "center",
 
-    "&:first-child": {
+    "&:first-of-type": {
       borderLeft: `1px solid ${theme.palette.main[400]}`,
       borderRadius: "9px 0 0 9px",
     },
@@ -296,7 +296,7 @@ const Pagination = styled(MuiPagination)(({ theme }) => ({
     display: "none",
   },
 
-  "li:has(.MuiPaginationItem-text):nth-child(7)": {
+  "li:has(.MuiPaginationItem-text):nth-of-type(7)": {
     // display: "none",
   },
 }));

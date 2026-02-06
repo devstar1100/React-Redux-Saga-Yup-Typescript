@@ -2,13 +2,12 @@ import { ReactElement } from "react";
 import { NavigateFunction } from "react-router";
 import { Filter, Row } from "../../../components/Tables/CheckboxTable/CheckboxTable";
 import { pages } from "../../../lib/routeUtils";
-import { format, parseISO } from "date-fns";
 import { MonteCarloBatch } from "../../../types/monteCarloBatches";
 
-export const formatSimulationRow = (
+export const formatMonteCarloBatchRow = (
   rows: MonteCarloBatch[],
   navigate: NavigateFunction,
-  statusFilters: Filter,
+  statusFilters?: Filter,
 ): Row[] => {
   return rows.map((row, index) => ({
     id: row["batch-id"],
@@ -18,7 +17,7 @@ export const formatSimulationRow = (
         align: "left",
         text: String(row["simulation-name"] ?? "-"),
         decorator: (text: string | ReactElement) => <u style={{ cursor: "pointer" }}>{text}</u>,
-        handler: () => navigate(`${pages.editSimulation()}/${row["simulation-id"]}`),
+        handler: () => navigate(`${pages.editMonteCarloBatch()}/${row["batch-id"]}`),
       },
       {
         align: "left",

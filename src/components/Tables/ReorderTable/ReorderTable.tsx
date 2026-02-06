@@ -353,7 +353,7 @@ const TableHead = styled(MuiTableHead)(({ theme }) => ({
     padding: "12px",
     fontWeight: theme.typography.h6.fontWeight,
 
-    "&:first-child": {
+    "&:first-of-type": {
       padding: "0",
       borderRadius: "9px 0 0 0",
       borderLeft: `1px solid ${theme.palette.grey[300]}`,
@@ -405,7 +405,7 @@ const TableBody = styled(MuiTableBody)(({ theme }) => ({
       },
     },
 
-    "&:first-child": {
+    "&:first-of-type": {
       padding: "0",
       minWidth: "44px",
       backgroundColor: theme.palette.main[700],
@@ -421,7 +421,7 @@ const TableBody = styled(MuiTableBody)(({ theme }) => ({
   },
 
   "& .MuiTableRow-root:last-child > .MuiTableCell-root": {
-    "&:first-child": {
+    "&:first-of-type": {
       borderRadius: "0 0 0 9px",
     },
 

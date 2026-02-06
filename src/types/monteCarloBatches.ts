@@ -1,5 +1,6 @@
 export interface MonteCarloBatch {
   "batch-id": number;
+  "simulation-name": string;
   "user-id": number;
   "simulation-id": number;
   "run-prefix": string;

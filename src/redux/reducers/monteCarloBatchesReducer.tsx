@@ -29,6 +29,6 @@ const monteCarloBatchesReducer = (state = monteCarloBatchesInitialState, action:
 };
 
 export const getMonteCarloBatches = (state: StoreType) => state.monteCarloBatches.monteCarloBatches;
-export const getAreSimulationsLoading = (state: StoreType) => state.monteCarloBatches.areLoading;
-
+export const getAreMonteCarloBatchesLoading = (state: StoreType) => state.monteCarloBatches.areLoading;
+export const getEnumerators = (state: StoreType) => state.simulations.enumerators;
 export default monteCarloBatchesReducer;

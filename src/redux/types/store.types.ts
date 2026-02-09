@@ -16,13 +16,11 @@ import { simulatedSystemsStateType } from "../reducers/simulatedSystemsReducer";
 import { modelOutputsStateType } from "../reducers/modelOutputsReducer";
 import { selectedSimulationStateType } from "../reducers/selectedSimulationReducer";
 import { monteCarloBatchesStateType } from "../reducers/monteCarloBatchesReducer";
-import { monteCarloBatchStateType } from "../reducers/monteCarlobatchReducer";
 
 export interface StoreType {
   app: appStateType;
   simulations: simulationsStateType;
   simulation: simulationStateType;
-  monteCarloBatch: monteCarloBatchStateType;
   auth: authStateType;
   customView: customViewStateType;
   customViews: customViewsStateType;

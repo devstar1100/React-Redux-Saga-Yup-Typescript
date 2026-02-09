@@ -15,8 +15,10 @@ import { getSimulations } from "../../redux/reducers/simulationsReducer";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import MonteCarloBatchBreadcrumbs from "./componens/MonteCarloBatchBreadcrumbs";
 import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
-import { getMonteCarloBatchValidationErrors } from "../../redux/reducers/monteCarlobatchReducer";
-import { getMonteCarloBatches } from "../../redux/reducers/monteCarloBatchesReducer";
+import {
+  getMonteCarloBatches,
+  getMonteCarloBatchValidationErrors,
+} from "../../redux/reducers/monteCarloBatchesReducer";
 import { addEditMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
 import { updateSimulationValidationErrors } from "../../redux/actions/simulationActions";
 import { UploadIcon } from "../../components/Icons/UploadIcon";

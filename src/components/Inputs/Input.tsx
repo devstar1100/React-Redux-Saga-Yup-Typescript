@@ -59,7 +59,7 @@ const Input: FC<InputProps> = ({
   </CustomFormControl>
 );
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
+export const CustomTextField = styled(TextField)(({ theme }) => ({
   height: "56px",
 
   "& .MuiInputBase-input": {

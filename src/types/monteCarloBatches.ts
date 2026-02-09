@@ -12,7 +12,7 @@ export interface MonteCarloBatch {
   "last-run-index": number;
   "master-seed": number;
   "max-execution-time-sec": number;
-  sleep_seconds_between_runs: number;
+  "sleep-seconds-between-runs": number;
   "execution-speed": number;
   "current-state": string;
   "result-file-name": string;

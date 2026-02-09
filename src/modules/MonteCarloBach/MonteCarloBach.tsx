@@ -173,7 +173,7 @@ const MonteCarloBach = () => {
           <SearchIcon />
         </SearchWrapper>
         <AddConfigurationWrapper>
-          <Button color="blue" size="small" href={pages.createSimulation()}>
+          <Button color="blue" size="small" href={pages.createMonteCarloBatch()}>
             Add New Batch
           </Button>
         </AddConfigurationWrapper>

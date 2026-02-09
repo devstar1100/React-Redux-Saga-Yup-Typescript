@@ -1,41 +1,33 @@
 import React, { ChangeEvent, FC, ReactElement, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { format, parseISO } from "date-fns";
 import { useParams } from "react-router-dom";
 import { Grid, styled, Typography } from "@mui/material";
 
 import Seo from "../../components/Seo/Seo";
 import Input from "../../components/Inputs/Input";
-import Select from "../../components/Select/Select";
 import withSimulation from "../../hocs/withSimulation";
 import Container from "../../components/WidgetContainer/WidgetContainer";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";
 import { pages } from "../../lib/routeUtils";
-import { camelize } from "../../lib/camelize";
-import { getServerNodes } from "../../redux/reducers/serverNodesReducer";
-import { getServerNodesServer } from "../../redux/actions/serverNodesActions";
-import { getSimulationUsers } from "../../redux/reducers/simulationUsersReducer";
-import { getSimulationUsersServer } from "../../redux/actions/simulationUsersActions";
-import { getConfigurationFiles } from "../../redux/reducers/configurationFilesReducer";
-import { getConfigurationFilesServer } from "../../redux/actions/configurationFilesActions";
-import {
-  addSimulationServer,
-  editSimulationServer,
-  updateSimulationValidationErrors,
-} from "../../redux/actions/simulationActions";
-import { getEnumeratorsServer, getSimulationsServer } from "../../redux/actions/simulationsActions";
-import { getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
+import { getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
+import { getSimulations } from "../../redux/reducers/simulationsReducer";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
-import { getSimulationValidationErrors } from "../../redux/reducers/simulationReducer";
-import { getUniqSelectItems } from "../../lib/getUniqSelectItems";
-import CustomCheckbox from "../../components/Checkbox/Checkbox";
 import MonteCarloBatchBreadcrumbs from "./componens/MonteCarloBatchBreadcrumbs";
+import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
+import { getMonteCarloBatchValidationErrors } from "../../redux/reducers/monteCarlobatchReducer";
+import { getMonteCarloBatches } from "../../redux/reducers/monteCarloBatchesReducer";
+import { addEditMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
+import { updateSimulationValidationErrors } from "../../redux/actions/simulationActions";
+import { UploadIcon } from "../../components/Icons/UploadIcon";
+import ObjectSelect from "../../components/Select/ObjectSelect";
+import { getUserData } from "../../redux/reducers/authReducer";
 
 interface IMainContainer {
   title: string;
   content: ReactElement;
   requireField?: boolean;
+  description?: ReactElement;
 }
 
 interface Props {
@@ -44,285 +36,203 @@ interface Props {
 
 const initialState = {
   simulationName: "",
-  simulationOwner: "",
-  project: "",
-  status: "",
-  simulationExecutablePath: "",
-  simulationBaseFolderPath: "",
-  simulationConfiguration: "",
-  simulationServerNode: "",
-  waitForGo: true,
-  developSimOutputPath: "",
+  runPrefix: "",
+  parametersFile: "",
+  numberOfPlannedRuns: 10,
+  maximumExecutionTime: 60,
+  sleepSecondsBetweenRuns: 0.0,
+  masterSeed: 123456,
+  executionSpeed: 1.0,
 };
 
 const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
   const dispatch = useDispatch();
-  const { simulationId } = useParams();
+  const { batchId } = useParams();
   const navigate = useNavigate();
   const formPrefilledRef = useRef<boolean>(false);
+  const userData = useSelector(getUserData);
+
   const simulations = useSelector(getSimulations);
-  const simulationValidationErrors = useSelector(getSimulationValidationErrors);
-  const simulationUsers = useSelector(getSimulationUsers);
-  const simulationUserConfigs = useSelector(getConfigurationFiles);
-  const serverNodes = useSelector(getServerNodes);
-  const enumerators = useSelector(getEnumerators);
-
-  const currentSimulation = (simulations || []).find((node) => Number(node["simulation-id"]) === Number(simulationId));
-
-  const projectValues = enumerators?.find((enumerator) => enumerator["enum-type"] === "projects");
-
-  const projectItems = projectValues ? projectValues["enum-values"].map((value) => value["enum-value-string"]) : [];
-  const statusValues = enumerators?.find((enumerator) => enumerator["enum-type"] === "simulation-statuses");
-
-  // Get user-settable statuses only
-  const userStatusItems = statusValues
-    ? statusValues["enum-values"]
-        .filter((value) => value["enum-value-id"] > 0 && value["enum-value-id"] < 100)
-        .map((value) => value["enum-value-string"])
-    : [];
-
-  // For display in dropdown, include current status if it's system-assigned
-  const displayStatusItems = (() => {
-    if (!isEditMode || !currentSimulation) {
-      return userStatusItems;
-    }
-
-    const currentStatus = currentSimulation["simulation-status"];
-    if (userStatusItems.includes(currentStatus)) {
-      // Current status is user-settable, just show user options
-      return userStatusItems;
-    } else {
-      // Current status is system-assigned, add it to the display list but keep it at the top
-      return [currentStatus, ...userStatusItems];
-    }
-  })();
-
-  const statusItems = userStatusItems; // Keep this for backward compatibility in submit logic
-
-  const simulationOwnerItems = getUniqSelectItems(simulationUsers, "user-name");
-  const simulationConfigurationItems = Array.from(
-    new Set(
-      simulationUserConfigs
-        .filter((config) => config["simulation-id"] === Number(simulationId))
-        .map((config) => `${config["configuration-name"]} [${config["simulation-name"]}]`),
-    ),
+  const monteCarloBatchValidationErrors = useSelector(getMonteCarloBatchValidationErrors);
+  const monteCarloBatches = useSelector(getMonteCarloBatches);
+  const currentMonteCarloBatch = (monteCarloBatches || []).find((node) => Number(node["batch-id"]) === Number(batchId));
+  const currentSimulation = simulations.find(
+    (node) => Number(node["simulation-id"]) === Number(currentMonteCarloBatch?.["simulation-id"]),
   );
-
-  const simulationServerNodeItems = Array.from(
-    new Set(
-      serverNodes
-        .filter((config) => config["simulation-id"] === Number(simulationId))
-        .map((node) => `${node["simulation-server-node-name"]} [${node["simulation-name"]}]`),
-    ),
-  );
+  const simulationNameItems = simulations.map((simulation) => ({
+    "simulation-name": simulation["simulation-name"],
+    "simulation-id": simulation["simulation-id"],
+  }));
 
   const actionName = isEditMode ? "Edit" : "Create";
-
   const [textFields, setTextFields] = useState<Record<string, string | number>>({
     simulationName: initialState.simulationName,
-    simulationExecutablePath: initialState.simulationExecutablePath,
-    simulationBaseFolderPath: initialState.simulationBaseFolderPath,
-    developSimOutputPath: initialState.developSimOutputPath,
+    runPrefix: initialState.runPrefix,
+    parametersFile: initialState.parametersFile,
+    numberOfPlannedRuns: initialState.numberOfPlannedRuns,
+    maximumExecutionTime: initialState.maximumExecutionTime,
+    sleepSecondsBetweenRuns: initialState.sleepSecondsBetweenRuns,
+    masterSeed: initialState.masterSeed,
+    executionSpeed: initialState.executionSpeed,
   });
-  const [simulationOwner, setSimulationOwner] = useState<string>(initialState.simulationOwner);
-  const [project, setProject] = useState<string>(initialState.project);
-  const [status, setStatus] = useState<string>(initialState.status);
-  const [originalStatusId, setOriginalStatusId] = useState<string>("");
-  const [simulationConfiguration, setSimulationConfiguration] = useState<string>(initialState.simulationConfiguration);
-  const [simulationServerNode, setSimulationServerNode] = useState<string>(initialState.simulationServerNode);
-  const [isMissing, setIsMissing] = useState<Record<string, boolean>>({
-    simulationName: false,
-    simulationExecutablePath: false,
-    simulationBaseFolderPath: false,
-    developSimOutputPath: false,
-  });
-  const [waitForGo, setWaitForGo] = useState<boolean>(initialState.waitForGo);
 
-  const isAllDataExist =
-    !!simulationOwnerItems.length &&
-    !!projectItems.length &&
-    !!userStatusItems.length &&
-    !!simulationConfigurationItems.length &&
-    !!simulationServerNodeItems.length;
+  const [simulationId, setSimulationId] = useState<number>(0);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({
+    runPrefix: "",
+    parametersFile: "",
+    numberOfPlannedRuns: "",
+    maximumExecutionTime: "",
+    sleepSecondsBetweenRuns: "",
+    masterSeed: "",
+    executionSpeed: "",
+  });
+
+  const isAllDataExist = !!simulationNameItems.length;
 
   const handleTextFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTextFields({ ...textFields, [e.target.name]: e.target.value });
-    setIsMissing({ ...isMissing, [e.target.name]: !e.target.value });
+    setFieldErrors({ ...fieldErrors, [e.target.name]: validation(e.target.name, e.target.value) });
+  };
+
+  const validation = (name: string, value: string | number) => {
+    switch (name) {
+      case "parametersFile": {
+        if (!value) return "Run Prefix is required.";
+        return "";
+      }
+      case "runPrefix": {
+        if (!value) return "Run Prefix is required.";
+        if (/^[A-Za-z0-9_-]+$/.test(String(value)) === false) return "Only letters, numbers, '-' and '_' are allowed.";
+        return "";
+      }
+      case "numberOfPlannedRuns": {
+        if (!value) return "Number of Planned Runs is required.";
+        if (!Number.isInteger(Number(value)) || Number(value) <= 0) return "Enter a positive integer greater than 0.";
+        return "";
+      }
+      case "maximumExecutionTime": {
+        if (!value) return "Maximum Execution Time is required.";
+        if (!Number.isFinite(Number(value)) || Number(value) <= 0) return "Enter a number greater than 0.";
+        return "";
+      }
+      case "sleepSecondsBetweenRuns": {
+        if (!value) return "Sleep seconds between runs is required.";
+        if (!Number.isFinite(Number(value)) || Number(value) < 0) return "Enter a number ≥ 0.";
+        return "";
+      }
+      case "masterSeed": {
+        if (!value) return "Master Seed is required.";
+        if (!Number.isInteger(Number(value)) || Number(value) <= 0) return "Enter a positive integer greater than 0.";
+        return "";
+      }
+      case "executionSpeed": {
+        if (!value) return "Execution Speed is required.";
+        if (!Number.isFinite(Number(value)) || Number(value) < 0) return "Enter 0.0 or a positive number.";
+        return "";
+      }
+      default:
+        return "";
+    }
+  };
+
+  const handleUploadFileName = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    const fileName = e.target.files?.[0].name;
+    if (!fileName) return;
+
+    setTextFields({ ...textFields, [key]: fileName });
+    e.target.value = null as any;
   };
 
   useEffect(() => {
-    dispatch(getEnumeratorsServer());
-    dispatch(getSimulationUsersServer({}));
-    dispatch(getServerNodesServer({}));
-    dispatch(getSimulationsServer({}));
-    dispatch(getConfigurationFilesServer({}));
+    dispatch(getMonteCarloBatchesListServer());
+    dispatch(getSimulationsExtendedInfoServer({}));
   }, []);
 
   useEffect(() => {
-    if (isEditMode && currentSimulation && isAllDataExist && !formPrefilledRef.current) {
+    if (isEditMode && currentMonteCarloBatch && isAllDataExist && !formPrefilledRef.current) {
       prefillForm();
       formPrefilledRef.current = true;
     }
-  }, [
-    isEditMode,
-    currentSimulation,
-    simulationOwnerItems,
-    projectItems,
-    userStatusItems,
-    simulationConfigurationItems,
-    simulationServerNodeItems,
-  ]);
-
-  useEffect(() => {
-    if (!isEditMode && isAllDataExist && !formPrefilledRef.current) {
-      setSimulationOwner(simulationOwnerItems[0]);
-      setProject(projectItems[0]);
-      setStatus(userStatusItems[0]);
-      setSimulationConfiguration(simulationConfigurationItems[0]);
-      setSimulationServerNode(simulationServerNodeItems[0]);
-      formPrefilledRef.current = true;
-    }
-  }, [
-    isEditMode,
-    simulationOwnerItems,
-    projectItems,
-    userStatusItems,
-    simulationConfigurationItems,
-    simulationServerNodeItems,
-  ]);
+  }, [isEditMode, currentMonteCarloBatch, isAllDataExist, formPrefilledRef]);
 
   const resetAllErrors = () => {
-    const newMissing = Object.keys(isMissing).reduce((acc, curr) => {
+    const newMissing = Object.keys(fieldErrors).reduce((acc, curr) => {
       return {
         ...acc,
-        [curr]: false,
+        [curr]: "",
       };
     }, {});
-    setIsMissing(newMissing);
+    setFieldErrors(newMissing);
   };
 
   useEffect(() => {
-    if (simulationValidationErrors.length) {
-      simulationValidationErrors.forEach((field) => {
-        field["form-field-name"] = camelize(field["form-field-name"]);
-
-        setIsMissing((prevState) => ({
+    if (monteCarloBatchValidationErrors.length) {
+      monteCarloBatchValidationErrors.forEach((field) => {
+        setFieldErrors((prevState) => ({
           ...prevState,
-          [field["form-field-name"]]: true,
+          [field["form-field-name"]]: "",
         }));
       });
     } else {
       resetAllErrors();
     }
-  }, [simulationValidationErrors]);
+  }, [monteCarloBatchValidationErrors]);
 
   const clearForm = () => {
-    setTextFields({
-      simulationName: initialState.simulationName,
-      simulationExecutablePath: initialState.simulationExecutablePath,
-      simulationBaseFolderPath: initialState.simulationBaseFolderPath,
-      developSimOutputPath: initialState.developSimOutputPath,
-    });
-    setSimulationOwner(initialState.simulationOwner);
-    setProject(initialState.project);
-    setStatus(initialState.status);
-    setOriginalStatusId("");
-    setSimulationConfiguration(initialState.simulationConfiguration);
-    setSimulationServerNode(initialState.simulationServerNode);
-    setWaitForGo(true);
+    if (currentSimulation) {
+      setTextFields({
+        simulationName: initialState.simulationName,
+        runPrefix: initialState.runPrefix,
+        parametersFile: initialState.parametersFile,
+        numberOfPlannedRuns: initialState.numberOfPlannedRuns,
+        maximumExecutionTime: initialState.maximumExecutionTime,
+        sleepSecondsBetweenRuns: initialState.sleepSecondsBetweenRuns,
+        MasterSeed: initialState.masterSeed,
+        executionSpeed: initialState.executionSpeed,
+      });
+      setSimulationId(currentSimulation["simulation-id"]);
+    }
   };
 
   const prefillForm = () => {
-    if (currentSimulation) {
-      const project = projectItems.find((_, index) => index + 1 === Number(currentSimulation["project-id"]));
-      const config = simulationUserConfigs.find(
-        (config) =>
-          Number(config["simulation-user-config-id"]) === Number(currentSimulation["simulation-user-config-id"]),
-      );
-      const serverNode = serverNodes.find(
-        (node) => Number(node["simulation-server-node-id"]) === Number(currentSimulation["simulation-server-node-id"]),
-      );
+    if (currentMonteCarloBatch && currentSimulation) {
       setTextFields({
-        simulationName: currentSimulation["simulation-name"],
-        simulationExecutablePath: currentSimulation["simulation-executable-path"],
-        simulationBaseFolderPath: currentSimulation["simulation-base-folder-path"],
-        developSimOutputPath: currentSimulation["develop-simulation-output-folder-path"],
+        simulationName: currentMonteCarloBatch["simulation-name"],
+        runPrefix: currentMonteCarloBatch["run-prefix"],
+        parametersFile: currentMonteCarloBatch["input-output-parameters-file-name"],
+        numberOfPlannedRuns: currentMonteCarloBatch["number-of-planned-runs"],
+        maximumExecutionTime: currentMonteCarloBatch["max-execution-time-sec"],
+        sleepSecondsBetweenRuns: currentMonteCarloBatch["sleep-seconds-between-runs"],
+        masterSeed: currentMonteCarloBatch["master-seed"],
+        executionSpeed: currentMonteCarloBatch["execution-speed"],
       });
-      setSimulationOwner(currentSimulation["simulation-owner-name"]);
-      setProject(project as string);
-      setStatus(currentSimulation["simulation-status"]);
-      setOriginalStatusId(currentSimulation["simulation-status-id"]);
-      setSimulationConfiguration(`${config?.["configuration-name"]} [${config?.["simulation-name"]}]`);
-      setSimulationServerNode(`${serverNode?.["simulation-server-node-name"]} [${serverNode?.["simulation-name"]}]`);
-      setWaitForGo(currentSimulation["wait-for-go-when-launching"]);
+      setSimulationId(currentSimulation?.["simulation-id"]);
     }
   };
 
   const handleCancel = () => {
     if (isEditMode) prefillForm();
     else clearForm();
-
-    navigate(pages.simulationCatalogue());
+    navigate(pages.monteCarloBatch());
   };
 
   const handleSubmit = () => {
-    const simulation = simulationUsers.find((user) => user["user-name"] === simulationOwner);
-    const projectIndex = projectItems.findIndex((item) => item === project);
-
-    // Determine the status ID to use
-    let statusId: string;
-    if (
-      isEditMode &&
-      currentSimulation &&
-      status === currentSimulation["simulation-status"] &&
-      !userStatusItems.includes(status)
-    ) {
-      // User didn't change the system-assigned status, keep original
-      statusId = originalStatusId;
-    } else {
-      // User selected a user-settable status or it's a new simulation
-      const statusIndex = userStatusItems.findIndex((item) => item === status);
-      statusId = String(statusIndex + 1);
-    }
-
-    const config = simulationUserConfigs.find(
-      (config) => config["configuration-name"] + " [" + config["simulation-name"] + "]" === simulationConfiguration,
-    );
-    const serverNode = serverNodes.find(
-      (node) => node["simulation-server-node-name"] + " [" + node["simulation-name"] + "]" === simulationServerNode,
-    );
-
-    if (isEditMode) {
+    const isValid = Object.values(fieldErrors).every((error) => error.trim() === "");
+    if (isValid) {
       dispatch(
-        editSimulationServer({
-          "simulation-id": Number(simulationId),
-          "simulation-name": textFields.simulationName as string,
-          "simulation-owner-id": simulation?.["user-id"] as string,
-          "project-id": String(projectIndex + 1),
-          "simulation-status-id": statusId,
-          "simulation-executable-path": textFields.simulationExecutablePath as string,
-          "simulation-base-folder-path": textFields.simulationBaseFolderPath as string,
-          "simulation-user-config-id": config?.["simulation-user-config-id"] as number,
-          "simulation-server-node-id": parseInt(serverNode?.["simulation-server-node-id"] as string),
-          "wait-for-go-when-launching": waitForGo,
-          "develop-simulation-output-folder-path": textFields.developSimOutputPath as string,
-          redirect: () => navigate("/simulation-catalogue"),
-        }),
-      );
-    } else {
-      dispatch(
-        addSimulationServer({
-          "simulation-name": textFields.simulationName as string,
-          "simulation-owner-id": simulation?.["user-id"] as string,
-          "project-id": String(projectIndex + 1),
-          "simulation-status-id": statusId,
-          "simulation-executable-path": textFields.simulationExecutablePath as string,
-          "simulation-base-folder-path": textFields.simulationBaseFolderPath as string,
-          "simulation-user-config-id": 0,
-          "simulation-server-node-id": 0,
-          "wait-for-go-when-launching": waitForGo,
-          "develop-simulation-output-folder-path": textFields.developSimOutputPath as string,
-          redirect: () => navigate("/simulation-catalogue"),
+        addEditMonteCarloBatchServer({
+          actionType: isEditMode ? "edit" : "add",
+          "user-id": userData["user-id"],
+          "batch-id": isEditMode ? Number(batchId) : 0,
+          "simulation-id": simulationId,
+          "run-prefix": textFields.runPrefix as string,
+          "input-output-parameters-file-name": textFields.parametersFile as string,
+          "number-of-planned-runs": textFields.numberOfPlannedRuns as number,
+          "sleep-seconds-between-runs": textFields.sleepSecondsBetweenRuns as number,
+          "master-seed": textFields.masterSeed as number,
+          "max-execution-time-sec": textFields.maximumExecutionTime as number,
+          "execution-speed": textFields.executionSpeed as number,
+          redirect: () => navigate("/monte-carlo-batches-config"),
         }),
       );
     }
@@ -332,30 +242,22 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     dispatch(updateSimulationValidationErrors([]));
   }, []);
 
-  const handleUploadFilePath = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    const filePath = e.target.value;
-    if (!filePath) return;
-
-    setTextFields({ ...textFields, [key]: filePath });
-    e.target.value = null as any;
-  };
-
   return (
     <Wrapper>
-      <Seo title={`${actionName} Simulation`} />
+      <Seo title={`${actionName} MonteCarloBach`} />
       <Container
         breadcrumbs={<MonteCarloBatchBreadcrumbs actionName={actionName} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }
       >
-        {!!simulationValidationErrors.length && (
+        {!!monteCarloBatchValidationErrors.length && (
           <Alert
             title="There are some errors, Please correct item below"
             variant={AlertVariant.error}
             content={
               <ListWrapper>
-                {simulationValidationErrors.map((error, index) => (
+                {monteCarloBatchValidationErrors.map((error, index) => (
                   <div key={error["form-field-name"]}>
                     <Typography variant="body2" color="red.100">
                       {index + 1}. {error["form-field-error"]}
@@ -369,168 +271,149 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
         <MainContainer
           requireField
           title="Simulation Name"
+          content={<ObjectSelect value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
+        />
+        <MainContainer
+          requireField
+          title="Run Prefix"
           content={
             <Input
-              formikName="simulationName"
-              error={isMissing.simulationName}
-              placeholder="Enter simulation name"
-              value={textFields.simulationName}
+              formikName="runPrefix"
+              error={!!fieldErrors.runPrefix}
+              helperText={fieldErrors.runPrefix}
+              placeholder="Enter run Prefix"
+              value={textFields.runPrefix}
               handleChange={handleTextFieldChange}
             />
           }
         />
         <MainContainer
           requireField
-          title="Simulation Owner"
-          content={<Select value={simulationOwner} onChange={setSimulationOwner} options={simulationOwnerItems} />}
+          title="Input/Output Parameters File"
+          content={
+            <Input
+              formikName="parametersFile"
+              error={!!fieldErrors.parametersFile}
+              helperText={fieldErrors.parametersFile}
+              placeholder="Enter input/Output Parameters File"
+              value={textFields.parametersFile}
+              InputProps={{
+                endAdornment: (
+                  <UploadWrapper>
+                    <UploadIcon />
+                    <UploadInput onChange={handleUploadFileName("parametersFile")} type="file" />
+                  </UploadWrapper>
+                ),
+              }}
+              handleChange={handleTextFieldChange}
+            />
+          }
         />
         <MainContainer
           requireField
-          title="Project"
-          content={<Select value={project} onChange={setProject} options={projectItems} />}
+          title="Number of Planned Runs"
+          content={
+            <Input
+              formikName="numberOfPlannedRuns"
+              error={!!fieldErrors.numberOfPlannedRuns}
+              helperText={fieldErrors.numberOfPlannedRuns}
+              placeholder="Enter number of Planned Runs"
+              value={textFields.numberOfPlannedRuns}
+              handleChange={handleTextFieldChange}
+            />
+          }
         />
         <MainContainer
           requireField
-          title="Status"
-          content={<Select value={status} onChange={setStatus} options={displayStatusItems} />}
+          title="Maximum Execution Time, seconds"
+          content={
+            <Input
+              formikName="maximumExecutionTime"
+              error={!!fieldErrors.maximumExecutionTime}
+              helperText={fieldErrors.maximumExecutionTime}
+              placeholder="Enter maximum Execution Time, seconds"
+              value={textFields.maximumExecutionTime}
+              handleChange={handleTextFieldChange}
+            />
+          }
         />
-        <InputsWrapper>
-          <MainContainer
-            requireField
-            title="Simulation executable file path"
-            content={
-              <Input
-                formikName="simulationExecutablePath"
-                error={isMissing.simulationExecutablePath}
-                placeholder="Enter simulation executable file path"
-                value={textFields.simulationExecutablePath}
-                handleChange={handleTextFieldChange}
-              />
-            }
-          />
-        </InputsWrapper>
-
-        <InputsWrapper>
-          <MainContainer
-            requireField
-            title="Simulation root folder"
-            content={
-              <Input
-                formikName="simulationBaseFolderPath"
-                error={isMissing.simulationBaseFolderPath}
-                placeholder="Enter deployment templates root folder"
-                value={textFields.simulationBaseFolderPath}
-                handleChange={handleTextFieldChange}
-              />
-            }
-          />
-        </InputsWrapper>
-
-        <InputsWrapper>
-          <MainContainer
-            requireField
-            title="Develop simulations output path"
-            content={
-              <Input
-                formikName="developSimOutputPath"
-                error={isMissing.developSimOutputPath}
-                placeholder="Enter develop simulations output path"
-                value={textFields.developSimOutputPath}
-                handleChange={handleTextFieldChange}
-              />
-            }
-          />
-        </InputsWrapper>
-
-        {isEditMode && (
-          <MainContainer
-            requireField
-            title="Simulation configuration"
-            content={
-              <LongSelectWrapper>
-                <Select
-                  value={simulationConfiguration}
-                  onChange={setSimulationConfiguration}
-                  options={simulationConfigurationItems}
-                />
-              </LongSelectWrapper>
-            }
-          />
-        )}
-        {isEditMode && (
-          <MainContainer
-            requireField
-            title="Simulation server node"
-            content={
-              <LongSelectWrapper>
-                <Select
-                  value={simulationServerNode}
-                  onChange={setSimulationServerNode}
-                  options={simulationServerNodeItems}
-                />
-              </LongSelectWrapper>
-            }
-          />
-        )}
         <MainContainer
-          title="Wait for GO when launching"
-          content={<CustomCheckbox isChecked={waitForGo} onChange={setWaitForGo} />}
+          requireField
+          title="Sleep seconds between runs"
+          content={
+            <Input
+              formikName="sleepSecondsBetweenRuns"
+              error={!!fieldErrors.sleepSecondsBetweenRuns}
+              helperText={fieldErrors.sleepSecondsBetweenRuns}
+              placeholder="Enter sleep seconds between runs"
+              value={textFields.sleepSecondsBetweenRuns}
+              handleChange={handleTextFieldChange}
+            />
+          }
         />
+        <MainContainer
+          requireField
+          title="Master Seed"
+          content={
+            <Input
+              formikName="masterSeed"
+              error={!!fieldErrors.masterSeed}
+              helperText={fieldErrors.masterSeed}
+              placeholder="Enter master Seed"
+              value={textFields.masterSeed}
+              handleChange={handleTextFieldChange}
+            />
+          }
+        />
+        <MainContainer
+          requireField
+          title="Execution Speed"
+          content={
+            <>
+              <Input
+                formikName="executionSpeed"
+                error={!!fieldErrors.executionSpeed}
+                helperText={fieldErrors.executionSpeed}
+                placeholder="Enter execution Speed"
+                value={textFields.executionSpeed}
+                handleChange={handleTextFieldChange}
+              />
+            </>
+          }
+          description={
+            <Typography
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: 100,
+                  md: 400,
+                },
+                px: 2,
+              }}
+            >
+              Set 0.0 for as-fast-aspossible, or any other positive number for specific-speed
+            </Typography>
+          }
+        />
+
         {isEditMode && (
           <>
-            <MainContainer
-              title="Informations"
-              content={
-                <Typography variant="body2" color="main.100">
-                  Internal Id: {currentSimulation?.["simulation-id"]}
-                </Typography>
-              }
-            />
-            <MainContainer
-              title="Time Stamps"
-              content={
-                <Grid container gap="4px" direction="column">
-                  <Typography variant="body2" color="main.100">
-                    Creation date:{" "}
-                    {format(
-                      parseISO(currentSimulation?.["creation-date"] || new Date().toISOString()),
-                      "yyyy-MM-dd HH:mm",
-                    )}
-                  </Typography>
-                  <Typography variant="body2" color="main.100">
-                    Last update date:{" "}
-                    {format(
-                      parseISO(currentSimulation?.["last-update-date"] || new Date().toISOString()),
-                      "yyyy-MM-dd HH:mm",
-                    )}
-                  </Typography>
-                </Grid>
-              }
-            />
             <MainContainer
               title="Additional Information"
               content={
                 <Grid container gap="4px" direction="column">
                   <Typography variant="body2" color="main.100">
-                    Selected server agent: {currentSimulation?.["server-agent-ip-address"]}:
-                    {currentSimulation?.["server-agent-listening-port-number"]}
+                    Batch ID {currentMonteCarloBatch?.["batch-id"]}
                   </Typography>
                   <Typography variant="body2" color="main.100">
-                    Selected API server: {currentSimulation?.["api-server-ip-address"]}:
-                    {currentSimulation?.["api-server-port-number"]}
+                    Simulation ID {currentMonteCarloBatch?.["simulation-id"]}
                   </Typography>
                   <Typography variant="body2" color="main.100">
-                    Selected user configuration file: {simulationConfiguration.split("[")[0] || ""}
+                    User ID {currentMonteCarloBatch?.["user-id"]}:
                   </Typography>
-                  <Typography variant="body2" color="main.100">
-                    Selected default initial conditions file: {currentSimulation?.["default-initial-conditions-name"]}
-                  </Typography>
-                  <Typography variant="body2" color="main.100">
-                    Selected override initial conditions file: {currentSimulation?.["initial-conditions-overide-name"]}
-                  </Typography>
-                  <Typography variant="body2" color="main.100">
-                    Selected scenario file: {currentSimulation?.["scenario-file-name"]}
-                  </Typography>
+                  {/* <Typography variant="body2" color="main.100">
+                    User ID: {simulationConfiguration.split("[")[0] || ""}
+                  </Typography> */}
                 </Grid>
               }
             />
@@ -541,7 +424,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
   );
 };
 
-const MainContainer: FC<IMainContainer> = ({ title, content, requireField }): ReactElement => (
+const MainContainer: FC<IMainContainer> = ({ title, content, requireField, description }): ReactElement => (
   <Grid container flexWrap="nowrap" alignItems="center" p="4px 0" className="customMainContainer">
     <Grid container width={{ xs: "180px", lg: "326px" }} flexWrap="nowrap">
       <Typography variant="body2" color="grey.50">
@@ -554,10 +437,13 @@ const MainContainer: FC<IMainContainer> = ({ title, content, requireField }): Re
       )}
     </Grid>
     <Grid>{content}</Grid>
+    <Grid>{description}</Grid>
   </Grid>
 );
 
-const Wrapper = styled(Grid)(({ theme }) => ({
+const Wrapper = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== "isEditMode",
+})<{ isEditMode?: boolean }>(({ theme }) => ({
   width: "100%",
   ".customHeading": {
     padding: "23px 24px",

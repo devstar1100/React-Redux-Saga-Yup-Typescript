@@ -47,12 +47,12 @@ module.exports = {
     "global-require": "off",
     "radix": "off",
     "arrow-body-style": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/no-static-element-interactioffs": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
   },
   settings: {
     "import/resolver": {
@@ -63,6 +63,6 @@ module.exports = {
         extensions: [".js", ".jsx", ".ts", ".tsx"],
         paths: ["src"]
       }
-    }
+    } 
   }
 };

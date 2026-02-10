@@ -13,7 +13,6 @@ import Select from "../../components/Select/Select";
 import { pages } from "../../lib/routeUtils";
 import { format, parseISO } from "date-fns";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";
-import ServerNodeBreadcrumbs from "./components/ServerNodeBreadcrumbs";
 import { getServerNodes, getServerNodeValidationErrors } from "../../redux/reducers/serverNodesReducer";
 import {
   addServerNodeServer,
@@ -26,6 +25,7 @@ import { getEnumeratorsServer, getSimulationsServer } from "../../redux/actions/
 import { camelize } from "../../lib/camelize";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import { updateSimulationUserValidationErrors } from "../../redux/actions/simulationUsersActions";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -231,11 +231,16 @@ const AddEditServerNode = ({ isEditMode = false }: Props) => {
     dispatch(updateServerNodeValidationErrors([]));
   }, []);
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Server nodes", to: pages.serverNodes() },
+    { label: `${actionName} server node`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Seo title={`${actionName} Server Node`} />
       <Container
-        breadcrumbs={<ServerNodeBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

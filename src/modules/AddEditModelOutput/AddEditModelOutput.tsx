@@ -7,10 +7,8 @@ import { useNavigate } from "react-router";
 import Seo from "../../components/Seo/Seo";
 import { FC, ReactElement, useEffect } from "react";
 import Container from "../../components/WidgetContainer/WidgetContainer";
-import SimulatedModelBreadcrumbs from "./components/SimulatedModelBreadcrumbs";
 import withSimulation from "../../hocs/withSimulation";
 import Input from "../../components/Inputs/Input";
-import CustomCheckbox from "../../components/Checkbox/Checkbox";
 import Select from "../../components/Select/Select";
 import { pages } from "../../lib/routeUtils";
 import { format, parseISO } from "date-fns";
@@ -19,11 +17,7 @@ import { getEnumeratorsServer, getSimulationsServer } from "../../redux/actions/
 import { useFormik } from "formik";
 import { getUniqSelectItems } from "../../lib/getUniqSelectItems";
 import { fetchSimulatedSystemsServer } from "../../redux/actions/simulatedSystemsActions";
-import {
-  addSimulatedModelsServer,
-  editSimulatedModelsServer,
-  getSimulatedModelsServer,
-} from "../../redux/actions/simulatedModelsActions";
+import { getSimulatedModelsServer } from "../../redux/actions/simulatedModelsActions";
 import { addModelOutputMapper } from "./lib/addModelOutputMapper";
 import useGetEnumeratorOptions from "../../hooks/useGetEnumeratorOptions";
 import SimulatedModelActionButtonsBlock from "./components/ActionButtonBlock";
@@ -37,11 +31,11 @@ import {
   updateModelOutputsValidationErrors,
 } from "../../redux/actions/modelOutputsActions";
 import { getModelOutputsValidationErrors, getStoredModelOutputs } from "../../redux/reducers/modelOutputsReducer";
-import ModelOutputsBreadcrumbs from "./components/SimulatedModelBreadcrumbs";
 import { modelOutputInitialState, modelOutputModelSchema } from "./lib/addEditModelOutputSchema";
 import { addEditSimulatedModelSchema } from "../AddEditSimulatedModel/lib/addEditSimulatedModelSchema";
 import { transformOutputAlias } from "./lib/transformOutputAlias";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -196,11 +190,16 @@ const AddEditModelOutput = ({ isEditMode = false }: Props) => {
     setValues({ ...values, outputStructureName });
   }, [values.outputSuffix, values.messageType, values.modelFullPath]);
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Model Outputs", to: pages.modelOutputsList(simulationName ?? "") },
+    { label: `${actionName} model output`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Seo title={`${actionName} Model Output`} />
       <Container
-        breadcrumbs={<ModelOutputsBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <SimulatedModelActionButtonsBlock onConfirm={submitForm} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

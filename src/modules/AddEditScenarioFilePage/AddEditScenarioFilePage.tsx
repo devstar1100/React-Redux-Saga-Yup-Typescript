@@ -15,7 +15,6 @@ import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import { formatDate, timePattern2 } from "../../lib/dateUtils";
 import { getEnumeratorsServer, getSimulationsServer } from "../../redux/actions/simulationsActions";
 import { getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
-import ScenarioBreadcrumbs from "./components/ScenarioBreadcrumbs";
 import { getCurrentScenarioFiles, getScenarioFilesValidationErrors } from "../../redux/reducers/scenarioFilesReducer";
 import { ScenarioFile } from "../../types/scenarioFile";
 import {
@@ -25,6 +24,7 @@ import {
 import { manageScenarioFileDto } from "./lib/manageScenario.dto";
 import { EnumValue, SimulationEnumType } from "../../types/simulations";
 import { getSimDependantPageFullLink } from "../../lib/simulationConfigurationUtils";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 enum PageMode {
   "create" = "create",
@@ -239,10 +239,15 @@ const AddEditScenarioFilePage: FC<Props> = ({ pageMode }) => {
     dispatch(updateScenarioFilesValidationErrors([]));
   }, []);
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Scenario files", to: `${pages.scenarioFiles()}/${simulationId}/${sessionId}` },
+    { label: `${actionName} scenario file`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Container
-        breadcrumbs={<ScenarioBreadcrumbs actionName={actionName} simulationId={simulationId} sessionId={sessionId} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

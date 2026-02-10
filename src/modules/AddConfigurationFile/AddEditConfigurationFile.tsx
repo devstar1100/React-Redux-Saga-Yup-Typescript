@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography, styled } from "@mui/material";
+import { Grid, Typography, styled } from "@mui/material";
 import Container from "../../components/WidgetContainer/WidgetContainer";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";
 import { pages } from "../../lib/routeUtils";
@@ -22,11 +22,11 @@ import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import { formatDate, timePattern2 } from "../../lib/dateUtils";
 import { getSimulationsServer } from "../../redux/actions/simulationsActions";
 import { getSimulations } from "../../redux/reducers/simulationsReducer";
-import ConfigurationBreadcrumbs from "./components/ConfigurationBreadcrumbs";
 import { getCurrentScenarioFiles } from "../../redux/reducers/scenarioFilesReducer";
 import { getScenarioFilesServer } from "../../redux/actions/scenarioFilesActions";
 import { UploadIcon } from "../../components/Icons/UploadIcon";
 import { toast } from "react-toastify";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 enum PageMode {
   "create" = "create",
@@ -312,10 +312,15 @@ const AddConfigurationFile: FC<Props> = ({ pageMode }) => {
     dispatch(updateConfigFileValidationErrors([]));
   }, []);
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Configuration files", to: pages.configurationFiles() },
+    { label: `${actionName} simulation configuration file`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Container
-        breadcrumbs={<ConfigurationBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

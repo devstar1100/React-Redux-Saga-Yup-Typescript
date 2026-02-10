@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import Seo from "../../components/Seo/Seo";
 import React, { FC, ReactElement, useEffect } from "react";
 import Container from "../../components/WidgetContainer/WidgetContainer";
-import SimulatedModelBreadcrumbs from "./components/SimulatedModelBreadcrumbs";
 import withSimulation from "../../hocs/withSimulation";
 import Input from "../../components/Inputs/Input";
 import CustomCheckbox from "../../components/Checkbox/Checkbox";
@@ -45,6 +44,7 @@ import {
   DEFAULT_HIGH_LEVEL_SYSTEM_OR_MODEL_ID,
   DEFAULT_INPUT_DATA_AGE_ID,
 } from "./static/constants";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -285,11 +285,16 @@ const AddEditSimulatedModel = ({ isEditMode = false }: Props) => {
     navigate(pages.simulatedModelList(simulationName || "unknown"));
   };
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Simulated models", to: pages.simulatedModelList(simulationName || "unknown") },
+    { label: `${actionName} simulated model`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Seo title={`${actionName} Simulated Model`} />
       <Container
-        breadcrumbs={<SimulatedModelBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <SimulatedModelActionButtonsBlock onConfirm={submitForm} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

@@ -14,7 +14,6 @@ import { useDispatch } from "react-redux";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import { getEnumeratorsServer, getSimulationsServer } from "../../redux/actions/simulationsActions";
 import { getEnumerators } from "../../redux/reducers/simulationsReducer";
-import ScenarioBreadcrumbs from "./components/ScenarioActionBreadcrumbs";
 import { ScenarioAction, ScenarioActionParameter, ScenarioTimeRepresentation } from "../../types/scenarioAction";
 import {
   getCurrentScenarioListActions,
@@ -40,6 +39,7 @@ import { getSimulationHyrarchy } from "../../redux/reducers/simulationReducer";
 import { getCurrentScenarioFiles } from "../../redux/reducers/scenarioFilesReducer";
 import { getScenarioFilesServer } from "../../redux/actions/scenarioFilesActions";
 import { getSimDependantPageFullLink } from "../../lib/simulationConfigurationUtils";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 enum PageMode {
   "create" = "create",
@@ -402,10 +402,21 @@ const AddEditScenarioFilePage: FC<Props> = ({ pageMode }) => {
     dispatch(updateScenarioActionsValidationErrors([]));
   }, []);
 
+  const scenarioActionUrl = `${getSimDependantPageFullLink({
+    baseRoute: pages.scenarioActions(),
+    simulationId,
+    sessionId,
+  })}/${listId}`;
+
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Scenario actions", to: scenarioActionUrl },
+    { label: `${actionName} scenario action`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Container
-        breadcrumbs={<ScenarioBreadcrumbs actionName={actionName} simulationId={simulationId} sessionId={sessionId} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

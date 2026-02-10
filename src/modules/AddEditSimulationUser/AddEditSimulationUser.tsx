@@ -11,7 +11,6 @@ import Select from "../../components/Select/Select";
 import withSimulation from "../../hocs/withSimulation";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import Container from "../../components/WidgetContainer/WidgetContainer";
-import SimulationUserBreadcrumbs from "./components/SimulationUserBreadcrumbs";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";
 import { pages } from "../../lib/routeUtils";
 import { camelize } from "../../lib/camelize";
@@ -24,6 +23,7 @@ import {
 import { getSimulationUserValidationErrors, getSimulationUsers } from "../../redux/reducers/simulationUsersReducer";
 import { getEnumeratorsServer } from "../../redux/actions/simulationsActions";
 import { getEnumerators } from "../../redux/reducers/simulationsReducer";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -221,11 +221,16 @@ const AddEditSimulationUser = ({ isEditMode = false }: Props) => {
     dispatch(updateSimulationUserValidationErrors([]));
   }, []);
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Simulation users", to: pages.simulationUsers() },
+    { label: `${actionName} simulation user`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Seo title={`${actionName} Simulation User`} />
       <Container
-        breadcrumbs={<SimulationUserBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

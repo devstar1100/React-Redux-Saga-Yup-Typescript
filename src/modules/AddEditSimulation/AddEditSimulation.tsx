@@ -9,7 +9,6 @@ import Seo from "../../components/Seo/Seo";
 import Input from "../../components/Inputs/Input";
 import Select from "../../components/Select/Select";
 import withSimulation from "../../hocs/withSimulation";
-import SimulationBreadcrumbs from "./components/SimulationBreadcrumbs";
 import Container from "../../components/WidgetContainer/WidgetContainer";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";
 import { pages } from "../../lib/routeUtils";
@@ -31,6 +30,7 @@ import Alert, { AlertVariant } from "../../components/Alert/Alert";
 import { getSimulationValidationErrors } from "../../redux/reducers/simulationReducer";
 import { getUniqSelectItems } from "../../lib/getUniqSelectItems";
 import CustomCheckbox from "../../components/Checkbox/Checkbox";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -340,11 +340,16 @@ const AddEditSimulation = ({ isEditMode = false }: Props) => {
     e.target.value = null as any;
   };
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Simulations", to: pages.simulationCatalogue() },
+    { label: `${actionName} simulation`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Seo title={`${actionName} Simulation`} />
       <Container
-        breadcrumbs={<SimulationBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

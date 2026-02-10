@@ -27,15 +27,14 @@ import {
   fetchModelInputsServer,
   setModelInputsValidationErrors,
 } from "../../redux/actions/modelInputsActions";
-import ModelInputsBreadcrumbs from "./components/ModelInputsBreadcrumbs";
 import SimulatedModelActionButtonsBlock from "./components/ActionButtonBlock";
-import { modelInputInitialState, modelInputModelSchema } from "./lib/addEditModelInputSchema";
+import { modelInputInitialState } from "./lib/addEditModelInputSchema";
 import useGetEnumeratorOptions from "../../hooks/useGetEnumeratorOptions";
 import { addModelInputMapper } from "./lib/addModelInputMapper";
 import { transformInputAlias } from "./lib/transformInputAlias";
 import { modelInputMapper } from "./lib/modelInputMapper";
-import { updateSelectedSimulationName } from "../../redux/actions/selectedSimulationActions";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -253,11 +252,16 @@ const AddEditModelInput = ({ isEditMode = false }: Props) => {
     dispatch(setModelInputsValidationErrors([]));
   }, []);
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Model Inputs", to: pages.modelInputs(simulationName ?? "") },
+    { label: `${actionName} model input`, to: "" },
+  ];
+
   return (
     <Wrapper>
       <Seo title={`${actionName} Model Input`} />
       <Container
-        breadcrumbs={<ModelInputsBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <SimulatedModelActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

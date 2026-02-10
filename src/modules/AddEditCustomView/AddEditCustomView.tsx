@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import Seo from "../../components/Seo/Seo";
 import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import Container from "../../components/WidgetContainer/WidgetContainer";
-import CustomBreadcrumbs from "./components/CustomBreadcrumbs";
 import withSimulation from "../../hocs/withSimulation";
 import Input from "../../components/Inputs/Input";
 import GridTemplate from "./components/GridTemplate";
@@ -25,6 +24,7 @@ import { pages } from "../../lib/routeUtils";
 import { format, parseISO } from "date-fns";
 import { getSimulations } from "../../redux/reducers/simulationsReducer";
 import { getSimulationsServer } from "../../redux/actions/simulationsActions";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -162,12 +162,16 @@ const AddEditCustomView = ({ isEditMode = false }: Props) => {
         }),
       );
   };
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Custom views", to: pages.customViewsList() },
+    { label: `${actionName} custom view`, to: "" },
+  ];
 
   return (
     <Wrapper>
       <Seo title={`${actionName} Custom View`} />
       <Container
-        breadcrumbs={<CustomBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

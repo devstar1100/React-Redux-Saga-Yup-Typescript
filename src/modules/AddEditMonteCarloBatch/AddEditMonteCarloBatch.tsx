@@ -13,7 +13,6 @@ import { pages } from "../../lib/routeUtils";
 import { getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
 import { getSimulations } from "../../redux/reducers/simulationsReducer";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
-import MonteCarloBatchBreadcrumbs from "./componens/MonteCarloBatchBreadcrumbs";
 import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
 import {
   getMonteCarloBatches,
@@ -22,8 +21,9 @@ import {
 import { addEditMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
 import { updateSimulationValidationErrors } from "../../redux/actions/simulationActions";
 import { UploadIcon } from "../../components/Icons/UploadIcon";
+import ObjectSelect from "../../components/Select/ObjectSelect";
 import { getUserData } from "../../redux/reducers/authReducer";
-import Select from "../../components/Select";
+import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -53,7 +53,6 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
   const navigate = useNavigate();
   const formPrefilledRef = useRef<boolean>(false);
   const userData = useSelector(getUserData);
-
   const simulations = useSelector(getSimulations);
   const monteCarloBatchValidationErrors = useSelector(getMonteCarloBatchValidationErrors);
   const monteCarloBatches = useSelector(getMonteCarloBatches);
@@ -62,8 +61,8 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     (node) => Number(node["simulation-id"]) === Number(currentMonteCarloBatch?.["simulation-id"]),
   );
   const simulationNameItems = simulations.map((simulation) => ({
-    value: simulation["simulation-id"],
-    item: simulation["simulation-name"],
+    "simulation-name": simulation["simulation-name"],
+    "simulation-id": simulation["simulation-id"],
   }));
 
   const actionName = isEditMode ? "Edit" : "Create";
@@ -240,6 +239,11 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     }
   };
 
+  const breadcrumbsItems: BreadcrumbsItem[] = [
+    { label: "Monte Carlo Batches", to: pages.monteCarloBatch() },
+    { label: `${actionName} Batch`, to: "" },
+  ];
+
   useEffect(() => {
     dispatch(updateSimulationValidationErrors([]));
   }, []);
@@ -248,7 +252,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     <Wrapper>
       <Seo title={`${actionName} MonteCarloBach`} />
       <Container
-        breadcrumbs={<MonteCarloBatchBreadcrumbs actionName={actionName} />}
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItems} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }
@@ -273,7 +277,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
         <MainContainer
           requireField
           title="Simulation Name"
-          content={<Select value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
+          content={<ObjectSelect value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
         />
         <MainContainer
           requireField
@@ -413,9 +417,6 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
                   <Typography variant="body2" color="main.100">
                     User ID {currentMonteCarloBatch?.["user-id"]}:
                   </Typography>
-                  {/* <Typography variant="body2" color="main.100">
-                    User ID: {simulationConfiguration.split("[")[0] || ""}
-                  </Typography> */}
                 </Grid>
               }
             />

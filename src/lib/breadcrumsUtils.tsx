@@ -1,4 +1,4 @@
-import { BreadcrumbItem } from "../components/Breadcrums";
+import { BreadcrumbItem } from "../components/Breadcrumbs";
 import { pages } from "./routeUtils";
 
 export const editBatchBreadcrums: BreadcrumbItem[] = [

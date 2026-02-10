@@ -23,7 +23,7 @@ import { updateSimulationValidationErrors } from "../../redux/actions/simulation
 import { UploadIcon } from "../../components/Icons/UploadIcon";
 import ObjectSelect from "../../components/Select/ObjectSelect";
 import { getUserData } from "../../redux/reducers/authReducer";
-import Breadcrumbs from "../../components/Breadcrums";
+import Breadcrumbs from "../../components/Breadcrumbs";
 import { addBatchBreadcrums, editBatchBreadcrums } from "../../lib/breadcrumsUtils";
 
 interface IMainContainer {

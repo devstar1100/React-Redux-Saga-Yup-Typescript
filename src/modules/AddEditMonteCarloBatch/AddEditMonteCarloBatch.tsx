@@ -22,8 +22,8 @@ import {
 import { addEditMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
 import { updateSimulationValidationErrors } from "../../redux/actions/simulationActions";
 import { UploadIcon } from "../../components/Icons/UploadIcon";
-import ObjectSelect from "../../components/Select/ObjectSelect";
 import { getUserData } from "../../redux/reducers/authReducer";
+import Select from "../../components/Select";
 
 interface IMainContainer {
   title: string;
@@ -62,8 +62,8 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     (node) => Number(node["simulation-id"]) === Number(currentMonteCarloBatch?.["simulation-id"]),
   );
   const simulationNameItems = simulations.map((simulation) => ({
-    "simulation-name": simulation["simulation-name"],
-    "simulation-id": simulation["simulation-id"],
+    value: simulation["simulation-id"],
+    item: simulation["simulation-name"],
   }));
 
   const actionName = isEditMode ? "Edit" : "Create";
@@ -273,7 +273,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
         <MainContainer
           requireField
           title="Simulation Name"
-          content={<ObjectSelect value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
+          content={<Select value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
         />
         <MainContainer
           requireField

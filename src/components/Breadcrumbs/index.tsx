@@ -1,21 +1,13 @@
 import { Link, Breadcrumbs as MuiBreadcrumbs, styled, Typography } from "@mui/material";
 import IconRightArrow from "../Icons/IconRightArrow";
 
-export type BreadcrumbItem = { label: string; to: string };
+export type BreadcrumbItem = { label: string; to: string; onClick?: () => void };
 
 interface BreadcrumbsProps {
-  allItems: BreadcrumbItem[];
-  currentLabel: string;
-  onClick?: () => void;
+  items: BreadcrumbItem[];
 }
 
-const Breadcrumbs = ({ allItems, currentLabel, onClick }: BreadcrumbsProps) => {
-  const items: BreadcrumbItem[] = [];
-  for (const item of allItems) {
-    items.push(item);
-    if (item.label === currentLabel) break;
-  }
-
+export const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
   return (
     <BreadcrumbsContainer separator={<IconRightArrow />} aria-label="breadcrumb">
       {items.map((item, index) =>
@@ -24,7 +16,7 @@ const Breadcrumbs = ({ allItems, currentLabel, onClick }: BreadcrumbsProps) => {
             {item.label}
           </Typography>
         ) : (
-          <Link underline="hover" key={index} color="inherit" href={`${item.to}`} onClick={onClick}>
+          <Link underline="hover" key={index} color="inherit" href={`${item.to}`} onClick={item.onClick}>
             <Typography color="grey.200" variant="custom1">
               {item.label}
             </Typography>
@@ -40,5 +32,3 @@ const BreadcrumbsContainer = styled(MuiBreadcrumbs)({
     gap: "18px",
   },
 });
-
-export default Breadcrumbs;

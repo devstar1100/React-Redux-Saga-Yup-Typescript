@@ -23,8 +23,7 @@ import { updateSimulationValidationErrors } from "../../redux/actions/simulation
 import { UploadIcon } from "../../components/Icons/UploadIcon";
 import ObjectSelect from "../../components/Select/ObjectSelect";
 import { getUserData } from "../../redux/reducers/authReducer";
-import Breadcrumbs from "../../components/Breadcrumbs";
-import { addBatchBreadcrums, editBatchBreadcrums } from "../../lib/breadcrumsUtils";
+import { Breadcrumbs, BreadcrumbItem } from "../../components/Breadcrumbs";
 
 interface IMainContainer {
   title: string;
@@ -240,6 +239,11 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     }
   };
 
+  const breadcrumbsItem: BreadcrumbItem[] = [
+    { label: "Monte Carlo Batches", to: pages.monteCarloBatch() },
+    { label: `${actionName} Batch`, to: "" },
+  ];
+
   useEffect(() => {
     dispatch(updateSimulationValidationErrors([]));
   }, []);
@@ -248,12 +252,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     <Wrapper>
       <Seo title={`${actionName} MonteCarloBach`} />
       <Container
-        breadcrumbs={
-          <Breadcrumbs
-            allItems={isEditMode ? editBatchBreadcrums : addBatchBreadcrums}
-            currentLabel={isEditMode ? "Edit Batch" : "Create Batch"}
-          />
-        }
+        breadcrumbs={<Breadcrumbs items={breadcrumbsItem} />}
         bottomActionBlock={
           <ActionButtonsBlock onConfirm={handleSubmit} onDecline={handleCancel} confirmBtnText={"Save"} />
         }

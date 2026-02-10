@@ -1,5 +1,6 @@
 export interface MonteCarloBatch {
   "batch-id": number;
+  "simulation-name": string;
   "user-id": number;
   "simulation-id": number;
   "run-prefix": string;
@@ -11,7 +12,7 @@ export interface MonteCarloBatch {
   "last-run-index": number;
   "master-seed": number;
   "max-execution-time-sec": number;
-  sleep_seconds_between_runs: number;
+  "sleep-seconds-between-runs": number;
   "execution-speed": number;
   "current-state": string;
   "result-file-name": string;

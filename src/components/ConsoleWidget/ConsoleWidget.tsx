@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import Container, { DisplayElementId } from "../WidgetContainer/WidgetContainer";
-import Select from "../Select/Select";
+import Select from "../Select";
 import { LogRecord, LogSeverityLevel } from "../../types/simulations";
 import { FC, ReactElement, useRef, useState } from "react";
 import ConsoleLine from "./ConsoleLine";

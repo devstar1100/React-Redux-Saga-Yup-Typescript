@@ -1,7 +1,7 @@
 import { Box, Typography, styled } from "@mui/material";
 
 import Input from "../../Inputs/Input";
-import Select from "../../Select/Select";
+import Select from "../../Select";
 import SearchIcon from "../../Icons/SearchIcon";
 import CustomCheckbox from "../../Checkbox/Checkbox";
 import NumericFormat from "../../NumericFormat/NumericFormat";

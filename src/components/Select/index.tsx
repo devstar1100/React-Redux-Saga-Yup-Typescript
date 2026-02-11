@@ -1,20 +1,20 @@
-import * as React from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import MUISelect from "@mui/material/Select";
-import { Grid, SelectChangeEvent, Typography, useTheme } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Grid,
+  SelectChangeEvent,
+  Typography,
+  useTheme,
+  Select as MUISelect,
+  FormControl,
+  MenuItem,
+  styled,
+} from "@mui/material";
 import { CollapseArrowUp } from "../Icons/CollapseArrowUp";
 import { CollapseArrowDown } from "../Icons/CollapseArrowDown";
 import { FC, ReactElement, useState } from "react";
 
-interface ObjectOption {
-  value: string | number;
-  item: string | number;
-}
-
 interface IObjectSelect {
-  options: ObjectOption[] | string[];
+  options: any[];
+  excludeOptions?: string[];
   value: number | string;
   placeholder?: string;
   disabled?: boolean;
@@ -22,13 +22,19 @@ interface IObjectSelect {
   onChange: (newValue: any) => void;
 }
 
-const Select: FC<IObjectSelect> = ({ options, value, placeholder, disabled, onChange, error }): ReactElement => {
-  const newOptions: ObjectOption[] = options.every((item) => typeof item === "object")
-    ? options
-    : options.map((option) => ({ value: option, item: option }));
+const Select: FC<IObjectSelect> = ({
+  options,
+  value,
+  placeholder,
+  disabled,
+  onChange,
+  error,
+  excludeOptions,
+}): ReactElement => {
+  const newOptions =
+    typeof options[0] === "object" ? options : options.map((option) => ({ value: option, item: option }));
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-
   const handleChange = (event: SelectChangeEvent) => {
     onChange(event.target.value);
   };
@@ -73,17 +79,19 @@ const Select: FC<IObjectSelect> = ({ options, value, placeholder, disabled, onCh
           },
         }}
       >
-        {newOptions.map((e, index) =>
-          e === undefined ? (
-            <Item value={""} key={index}>
-              <Typography variant="subtitle1">{e}</Typography>
-            </Item>
-          ) : (
-            <Item value={e.value} key={index}>
-              <Typography variant="subtitle1">{e.item}</Typography>
-            </Item>
-          ),
-        )}
+        {newOptions
+          .filter((el) => !(excludeOptions ?? []).includes(el))
+          .map((e, index) =>
+            e === undefined ? (
+              <Item value={""} key={index}>
+                <Typography variant="subtitle1">{e}</Typography>
+              </Item>
+            ) : (
+              <Item value={e.value} key={index}>
+                <Typography variant="subtitle1">{e.item}</Typography>
+              </Item>
+            ),
+          )}
       </MUISelect>
     </Form>
   );

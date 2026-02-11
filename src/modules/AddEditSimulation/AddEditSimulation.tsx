@@ -7,7 +7,7 @@ import { Grid, styled, Typography } from "@mui/material";
 
 import Seo from "../../components/Seo/Seo";
 import Input from "../../components/Inputs/Input";
-import Select from "../../components/Select/Select";
+import Select from "../../components/Select";
 import withSimulation from "../../hocs/withSimulation";
 import Container from "../../components/WidgetContainer/WidgetContainer";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";

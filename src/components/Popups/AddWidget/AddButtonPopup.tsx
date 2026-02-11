@@ -10,7 +10,7 @@ import { DisplayElementButtonType, DisplayElementType, MapIconType } from "../..
 import { AddWidgetPopupProps } from "../../../types/addWidgetPopupProps";
 import { getAddButtonPopupState } from "../../../redux/reducers/popupsReducer";
 import { getTheme } from "../../../lib/theme/theme";
-import Select from "../../Select/Select";
+import Select from "../../Select";
 import NumericFormat from "../../NumericFormat/NumericFormat";
 import { getIconByType } from "../../../lib/getIconByType";
 import { ButtonUnit } from "../../../types/addWidget";

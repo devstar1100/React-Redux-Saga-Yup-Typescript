@@ -9,7 +9,7 @@ import { FC, ReactElement, useEffect } from "react";
 import Container from "../../components/WidgetContainer/WidgetContainer";
 import withSimulation from "../../hocs/withSimulation";
 import Input from "../../components/Inputs/Input";
-import Select from "../../components/Select/Select";
+import Select from "../../components/Select";
 import { pages } from "../../lib/routeUtils";
 import { format, parseISO } from "date-fns";
 import { getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";

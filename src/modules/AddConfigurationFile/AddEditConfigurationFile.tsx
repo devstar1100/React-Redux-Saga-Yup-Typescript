@@ -5,7 +5,7 @@ import { pages } from "../../lib/routeUtils";
 import { useNavigate, useParams } from "react-router";
 import { ChangeEvent, FC, ReactElement, useEffect, useMemo, useState } from "react";
 import withSimulation from "../../hocs/withSimulation";
-import Select from "../../components/Select/Select";
+import Select from "../../components/Select";
 import { useSelector } from "react-redux";
 import { getConfigFileValidationErrors, getConfigurationFiles } from "../../redux/reducers/configurationFilesReducer";
 import Input from "../../components/Inputs/Input";

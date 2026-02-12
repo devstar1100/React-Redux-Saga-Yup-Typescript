@@ -61,8 +61,8 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     (node) => Number(node["simulation-id"]) === Number(currentMonteCarloBatch?.["simulation-id"]),
   );
   const simulationNameItems = simulations.map((simulation) => ({
-    value: simulation["simulation-id"],
-    item: simulation["simulation-name"],
+    id: simulation["simulation-id"],
+    label: simulation["simulation-name"],
   }));
 
   const actionName = isEditMode ? "Edit" : "Create";

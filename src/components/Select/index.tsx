@@ -12,61 +12,60 @@ import { CollapseArrowUp } from "../Icons/CollapseArrowUp";
 import { CollapseArrowDown } from "../Icons/CollapseArrowDown";
 import { FC, ReactElement, useState } from "react";
 
-interface IObjectSelect {
-  options: any[];
-  excludeOptions?: string[];
-  value: number | string;
+export type SelectOption = {
+  id: string | number;
+  label: string;
+};
+
+interface ISelect {
+  options: string[] | SelectOption[];
+  excludeOptions?: (string | number)[];
+  value: string | number;
   placeholder?: string;
   disabled?: boolean;
   error?: boolean;
   onChange: (newValue: any) => void;
 }
 
-const Select: FC<IObjectSelect> = ({
+const Select: FC<ISelect> = ({
   options,
+  excludeOptions = [],
   value,
   placeholder,
   disabled,
   onChange,
   error,
-  excludeOptions,
 }): ReactElement => {
-  const newOptions =
-    typeof options[0] === "object" ? options : options.map((option) => ({ value: option, item: option }));
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const handleChange = (event: SelectChangeEvent) => {
-    onChange(event.target.value);
-  };
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  const isStringArray = (arr: unknown[]): arr is string[] => arr.every((item) => typeof item === "string");
+
+  const normalizedOptions: SelectOption[] = isStringArray(options)
+    ? options.map((item) => ({ id: item, label: item }))
+    : options;
+
+  const availableOptions = normalizedOptions.filter((opt) => !excludeOptions.includes(opt.id));
 
   return (
-    <Form className={`customSelect ${error && "error"}`}>
+    <Form className={`customSelect ${error ? "error" : ""}`}>
       <MUISelect
         IconComponent={() => <Grid className="arrowIcon">{open ? <CollapseArrowUp /> : <CollapseArrowDown />}</Grid>}
-        id="select"
         open={open}
-        onClose={handleClick}
-        onOpen={handleClick}
-        value={String(value)}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        value={value}
         disabled={disabled}
         displayEmpty
-        renderValue={(value) =>
-          value !== undefined ? (
+        onChange={(e) => onChange(e.target.value)}
+        renderValue={(value) => {
+          const selectedItem = normalizedOptions.find((opt) => opt.id === value);
+          return (
             <Typography variant="subtitle1" color="textColor.lightWhite" pr="11px">
-              {newOptions.find((item) => String(item["value"]) === value)?.["item"]}
+              {selectedItem?.label ?? placeholder}
             </Typography>
-          ) : (
-            <Typography variant="subtitle1" color="textColor.lightWhite" pr="11px">
-              {placeholder}
-            </Typography>
-          )
-        }
-        inputProps={{ "aria-label": "Without label" }}
-        onChange={handleChange}
+          );
+        }}
         MenuProps={{
           PaperProps: {
             style: {
@@ -79,19 +78,11 @@ const Select: FC<IObjectSelect> = ({
           },
         }}
       >
-        {newOptions
-          .filter((el) => !(excludeOptions ?? []).includes(el))
-          .map((e, index) =>
-            e === undefined ? (
-              <Item value={""} key={index}>
-                <Typography variant="subtitle1">{e}</Typography>
-              </Item>
-            ) : (
-              <Item value={e.value} key={index}>
-                <Typography variant="subtitle1">{e.item}</Typography>
-              </Item>
-            ),
-          )}
+        {availableOptions.map((item, index) => (
+          <Item value={item.label === "Not defined" ? "" : item.id} key={index}>
+            <Typography variant="subtitle1">{item.label}</Typography>
+          </Item>
+        ))}
       </MUISelect>
     </Form>
   );
@@ -112,15 +103,15 @@ const Item = styled(MenuItem)(({ theme }) => ({
 }));
 
 const Form = styled(FormControl)(({ theme }) => ({
-  maxWidth: "220px",
-  minWidth: "200px",
+  maxWidth: "320px",
+  minWidth: "250px !important",
   position: "relative",
   borderRadius: theme.borderRadius.xs,
   backgroundColor: theme.palette.additional[700],
   zIndex: 0,
 
   "& .MuiSelect-select": {
-    display: "flex",
+    width: "100%",
     alignItems: "center",
     justifyContent: "space-between",
     padding: "9px 12px",

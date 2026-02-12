@@ -412,7 +412,7 @@ const AddConfigurationFile: FC<Props> = ({ pageMode }) => {
         ))}
         {nonEditableInfoConfigs.map((config) => {
           if (config.mode && config.mode !== pageMode) return;
-          const data = (currentFile?.[config.key] || formData[config.key]).toString();
+          const data = String(currentFile?.[config.key] || formData[config.key]);
           const renderData = config.formatter ? config.formatter(data) : data;
 
           // Special rendering for documentation link

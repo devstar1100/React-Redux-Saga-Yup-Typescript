@@ -12,7 +12,7 @@ import Input from "../../components/Inputs/Input";
 import GridTemplate from "./components/GridTemplate";
 import CustomCheckbox from "../../components/Checkbox/Checkbox";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
-import Select from "../../components/Select/Select";
+import Select from "../../components/Select";
 import {
   addCustomViewServer,
   editCustomViewServer,

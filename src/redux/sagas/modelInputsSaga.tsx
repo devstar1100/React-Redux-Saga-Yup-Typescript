@@ -94,7 +94,6 @@ function* fetchListModelsServerFail(action: any) {
 
 function* addModelInputServerSuccessHandler(action: any) {
   const { redirect, simulationName, structureName } = action.meta.previousAction.payload;
-  console.log("structureName", structureName);
   yield put(
     updateModelInputAlertData({
       isVisible: true,

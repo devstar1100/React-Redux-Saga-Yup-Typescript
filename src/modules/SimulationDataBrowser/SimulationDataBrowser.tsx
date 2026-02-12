@@ -21,7 +21,7 @@ import { Model, ModelDataItem } from "../../types/simulations";
 import { getTheme } from "../../lib/theme/theme";
 import Input from "../../components/Inputs/Input";
 import SearchIcon from "../../components/Icons/SearchIcon";
-import Select from "../../components/Select/Select";
+import Select from "../../components/Select";
 import { DataBrowserFilterKey, FilterOption } from "../../hocs/withAddWidget";
 import MultiSelect from "../../components/MultiSelect/MultiSelect";
 import { DataBrowserFilters } from "../../types/dataBrowserFilters";

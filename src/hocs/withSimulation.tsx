@@ -46,7 +46,6 @@ export const fetchLogRecordsHelper = ({ dispatchFunc, logRecords, sessionId }: F
 
 const withSimulation = (Component: any, refreshIntervalMs?: number) => {
   const Simulation = (props: any) => {
-    console.log("simuliationlist1");
     const dispatch = useDispatch();
     const { simulationId, sessionId } = useParams();
     const [openSideBar, setOpenSideBar] = useState(true);

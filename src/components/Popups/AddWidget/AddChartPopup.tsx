@@ -3,7 +3,7 @@ import { Box, Typography, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../../Inputs/Input";
-import Select from "../../Select/Select";
+import Select from "../../Select";
 import SearchIcon from "../../Icons/SearchIcon";
 import withAddWidget, { FilterOption, WidgetGeneralVars, WidgetUnit } from "../../../hocs/withAddWidget";
 import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable/ReorderTable";

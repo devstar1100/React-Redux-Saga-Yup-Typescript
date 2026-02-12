@@ -21,9 +21,9 @@ import {
 import { addEditMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
 import { updateSimulationValidationErrors } from "../../redux/actions/simulationActions";
 import { UploadIcon } from "../../components/Icons/UploadIcon";
-import ObjectSelect from "../../components/Select/ObjectSelect";
 import { getUserData } from "../../redux/reducers/authReducer";
 import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
+import Select from "../../components/Select";
 
 interface IMainContainer {
   title: string;
@@ -61,13 +61,12 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     (node) => Number(node["simulation-id"]) === Number(currentMonteCarloBatch?.["simulation-id"]),
   );
   const simulationNameItems = simulations.map((simulation) => ({
-    "simulation-name": simulation["simulation-name"],
-    "simulation-id": simulation["simulation-id"],
+    id: simulation["simulation-id"],
+    label: simulation["simulation-name"],
   }));
 
   const actionName = isEditMode ? "Edit" : "Create";
   const [textFields, setTextFields] = useState<Record<string, string | number>>({
-    simulationName: initialState.simulationName,
     runPrefix: initialState.runPrefix,
     parametersFile: initialState.parametersFile,
     numberOfPlannedRuns: initialState.numberOfPlannedRuns,
@@ -77,7 +76,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
     executionSpeed: initialState.executionSpeed,
   });
 
-  const [simulationId, setSimulationId] = useState<number>(0);
+  const [simulationId, setSimulationId] = useState<number>(-1);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({
     runPrefix: "",
     parametersFile: "",
@@ -218,7 +217,11 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
   };
 
   const handleSubmit = () => {
-    const isValid = Object.values(fieldErrors).every((error) => error.trim() === "");
+    const isValid =
+      Object.values(fieldErrors).every((error) => error.trim() === "") &&
+      Object.values(textFields).every((value) => String(value).trim() !== "") &&
+      simulationId !== -1;
+
     if (isValid) {
       dispatch(
         addEditMonteCarloBatchServer({
@@ -277,7 +280,7 @@ const AddEditMonteCarloBatch = ({ isEditMode = false }: Props) => {
         <MainContainer
           requireField
           title="Simulation Name"
-          content={<ObjectSelect value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
+          content={<Select value={simulationId} onChange={setSimulationId} options={simulationNameItems} />}
         />
         <MainContainer
           requireField

@@ -4,6 +4,7 @@ export const pages = {
   customView: () => "/custom-view",
   simulationDataBrowser: () => "/simulation-data-browser",
   simulations: () => "/simulations",
+  monteCarloBatchesList: () => "/monte-carlo-batches",
   createSimulation: () => "/create-simulation",
   editSimulation: () => "/edit-simulation",
   simulationUsers: () => "/simulation-users",

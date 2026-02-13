@@ -36,7 +36,7 @@ import AddEditModelOutput from "./modules/AddEditModelOutput/AddEditModelOutput"
 import AddEditModelInput from "./modules/AddEditModelInput/AddEditModelInput";
 import MonteCarloBach from "./modules/MonteCarloBach/MonteCarloBach";
 import AddEditMonteCarloBatch from "./modules/AddEditMonteCarloBatch/AddEditMonteCarloBatch";
-import MonteCarloBatchesList from "./modules/MonteCarloBatchesList1/monteCarloBatchesList";
+import MonteCarloBatchesList from "./modules/MonteCarloBatchesList/monteCarloBatchesList";
 
 const Router = () => {
   return (

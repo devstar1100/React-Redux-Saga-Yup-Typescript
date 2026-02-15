@@ -14,7 +14,7 @@ import { failActionType } from "../../lib/failActionType";
 import { toast } from "react-toastify";
 import { ValidationError } from "../../types/validationError";
 
-const MonteCarloBatchSaga = [
+const monteCarloBatchSaga = [
   takeEvery(successActionType(DELETE_MONTECARLOBATCH_SERVER), deleteMonteCarloBatchSuccessHandler),
   takeEvery(failActionType(DELETE_MONTECARLOBATCH_SERVER), deleteMonteCarloBatchFailHandler),
 
@@ -90,4 +90,4 @@ function* addEditMonteCarloBatchFailHandler(action: any) {
   yield put(updateMonteCarloBatchValidationErrors(response));
 }
 
-export default MonteCarloBatchSaga;
+export default monteCarloBatchSaga;

@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-
 import { pages } from "./lib/routeUtils";
 import SimulationDashboard from "./modules/SimulationDashboard/SimulationDashboard";
 import CustomView from "./modules/CustomView/CustomView";
@@ -37,6 +36,7 @@ import AddEditModelInput from "./modules/AddEditModelInput/AddEditModelInput";
 import MonteCarloBach from "./modules/MonteCarloBach/MonteCarloBach";
 import AddEditMonteCarloBatch from "./modules/AddEditMonteCarloBatch/AddEditMonteCarloBatch";
 import MonteCarloBatchesList from "./modules/MonteCarloBatchesList/monteCarloBatchesList";
+import MonteCarloFilesList from "./modules/MonteCarloFilesList";
 
 const Router = () => {
   return (
@@ -60,6 +60,7 @@ const Router = () => {
           <Route path={pages.createSimulation()} element={<AddEditSimulation />} />
           <Route path={`${pages.editSimulation()}/:simulationId`} element={<AddEditSimulation isEditMode />} />
           <Route path={pages.configurationFiles()} element={<ConfigurationFilesList />} />
+          <Route path={pages.monteCarloFiles()} element={<MonteCarloFilesList />} />
           <Route
             path={`${pages.modifyConfigurationFile()}/:fileId`}
             element={<AddConfigurationFile pageMode={"edit"} />}

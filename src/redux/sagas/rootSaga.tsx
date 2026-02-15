@@ -10,11 +10,12 @@ import serverNodesSaga from "./serverNodesSaga";
 import scenarioFilesSaga from "./scenarioFilesSaga";
 import scenarioActionsSaga from "./scenarioActionsSaga";
 import modelInputsSaga from "./modelInputsSaga";
-import { simulatedModelsSaga } from "./simulatedModelsSaga";
 import simulatedSystemsSaga from "./simulatedSystemsSaga";
 import modelOutputsSaga from "./modelOutputsSaga";
 import monteCarloBatchesSaga from "./monteCarloBatchesSaga";
-import MonteCarloBatchSaga from "./monteCarloBatchSaga";
+import monteCarloFilesSaga from "./monteCarloFilesSaga";
+import monteCarloBatchSaga from "./monteCarloBatchSaga";
+import simulatedModelsSaga from "./simulatedModelsSaga";
 
 function* rootSaga() {
   yield all([
@@ -33,7 +34,8 @@ function* rootSaga() {
     ...simulatedSystemsSaga,
     ...modelOutputsSaga,
     ...monteCarloBatchesSaga,
-    ...MonteCarloBatchSaga,
+    ...monteCarloBatchSaga,
+    ...monteCarloFilesSaga,
   ]);
 }
 

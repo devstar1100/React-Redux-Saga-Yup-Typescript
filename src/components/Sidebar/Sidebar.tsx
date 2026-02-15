@@ -18,6 +18,7 @@ import { getSimulationCustomViews } from "../../redux/reducers/customViewsReduce
 import CollapseItem from "./CollapseItem";
 import LogoutWrapper from "./LogoutWrapper";
 import { getSimDependantPageFullLink } from "../../lib/simulationConfigurationUtils";
+import DiceIcon from "../Icons/DiceIcon";
 
 interface Props {
   openSideBar: boolean;
@@ -117,6 +118,13 @@ const getSidebarElements = ({
     icon: <SideBarManageIcon />,
     link: pages.simulations(),
     isSelected: currentRoute === pages.simulations(),
+  },
+  {
+    id: "manage-monteCarloBatches",
+    title: "Monte Carlo Batches",
+    icon: <DiceIcon />,
+    link: pages.monteCarloBatchesList(),
+    isSelected: currentRoute === pages.monteCarloBatchesList(),
   },
   {
     id: "simulation-control",

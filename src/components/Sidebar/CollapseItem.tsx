@@ -79,7 +79,7 @@ const CollapseItem: FC<ICollapseItem> = ({
             isSelected={isSelected}
           >
             <Wrapper container alignItems="center" gap={{ sm: "12px", lg: "18px" }}>
-              {icon && icon}
+              {icon}
               <Typography variant="body1" fontWeight="700" whiteSpace="nowrap" display={openSideBar ? "flex" : "none"}>
                 {title}
               </Typography>
@@ -157,10 +157,22 @@ const Wrapper = styled<FC<GridProps & { open?: boolean }>>(
         stroke: open ? theme.palette.main[50] : theme.palette.main[100],
       },
     },
+    rect: {
+      stroke: open ? theme.palette.main[50] : theme.palette.main[100],
+      circle: {
+        stroke: open ? theme.palette.main[50] : theme.palette.main[100],
+      },
+    },
   },
   ":hover": {
     svg: {
       path: {
+        stroke: theme.palette.main[50],
+        circle: {
+          stroke: theme.palette.main[50],
+        },
+      },
+      rect: {
         stroke: theme.palette.main[50],
         circle: {
           stroke: theme.palette.main[50],

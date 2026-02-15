@@ -36,6 +36,7 @@ import AddEditModelOutput from "./modules/AddEditModelOutput/AddEditModelOutput"
 import AddEditModelInput from "./modules/AddEditModelInput/AddEditModelInput";
 import MonteCarloBach from "./modules/MonteCarloBach/MonteCarloBach";
 import AddEditMonteCarloBatch from "./modules/AddEditMonteCarloBatch/AddEditMonteCarloBatch";
+import MonteCarloBatchesList from "./modules/MonteCarloBatchesList/monteCarloBatchesList";
 
 const Router = () => {
   return (
@@ -67,6 +68,7 @@ const Router = () => {
           <Route path={pages.simulationUsers()} element={<SimulationUsers />} />
           <Route path={pages.simulationCatalogue()} element={<SimulationCatalogue />} />
 
+          <Route path={pages.monteCarloBatchesList()} element={<MonteCarloBatchesList />} />
           <Route path={pages.monteCarloBatch()} element={<MonteCarloBach />} />
           <Route path={pages.createMonteCarloBatch()} element={<AddEditMonteCarloBatch />} />
           <Route path={`${pages.editMonteCarloBatch()}/:batchId`} element={<AddEditMonteCarloBatch isEditMode />} />

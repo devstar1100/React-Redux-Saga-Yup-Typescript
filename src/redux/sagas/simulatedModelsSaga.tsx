@@ -16,7 +16,7 @@ import { failActionType } from "../../lib/failActionType";
 import { ValidationError } from "../../types/validationError";
 import { toast } from "react-toastify";
 
-export const simulatedModelsSaga = [
+const simulatedModelsSaga = [
   takeEvery(GET_SIMULATED_MODELS, getSimulatedModelsHandler),
   takeEvery(successActionType(GET_SIMULATED_MODELS), getSimulatedModelsSuccessHandler),
   takeEvery(failActionType(GET_SIMULATED_MODELS), getSimulatedModelsFailHandler),
@@ -110,3 +110,5 @@ function* deleteSimulatedModelSuccessHandler(action: any) {
 function* deleteSimulatedModelFailHandler() {
   yield toast.success("Error while deleting simulated model");
 }
+
+export default simulatedModelsSaga;

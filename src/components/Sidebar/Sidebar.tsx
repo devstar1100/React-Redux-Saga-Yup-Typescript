@@ -1,13 +1,6 @@
-import { Grid, styled } from "@mui/material";
-import SideBarSimulationIcon from "../Icons/SideBarSimulationIcon";
-import SideBarManageIcon from "../Icons/SideBarManageIcon";
-import SideBarConfigureIcon from "../Icons/SideBarConfigureIcon";
-import SideBarDevelopSimulation from "../Icons/SideBarDevelopSimulation";
-import SideBarAnalyseIcon from "../Icons/SideBarAnalyseIcon";
-import HorizontalGrayLine from "../Lines/HorizontalGrayLine";
+import { Grid, styled, GridProps } from "@mui/material";
 import { pages } from "../../lib/routeUtils";
 import { FC, ReactElement } from "react";
-import { GridProps } from "@mui/material/Grid/Grid";
 import { preventForwardProps } from "../../lib/preventForwardProps";
 import { getCurrentSimulation, getSessionInformation } from "../../redux/reducers/simulationReducer";
 import { useSelector } from "react-redux";
@@ -15,9 +8,15 @@ import { CustomViewType } from "../../types/customViews";
 import { useLocation, useParams } from "react-router-dom";
 import { getCurrentRoute } from "../../lib/getCurrentRoute";
 import { getSimulationCustomViews } from "../../redux/reducers/customViewsReducer";
+import { getSimDependantPageFullLink } from "../../lib/simulationConfigurationUtils";
+import SideBarSimulationIcon from "../Icons/SideBarSimulationIcon";
+import SideBarManageIcon from "../Icons/SideBarManageIcon";
+import SideBarConfigureIcon from "../Icons/SideBarConfigureIcon";
+import SideBarDevelopSimulation from "../Icons/SideBarDevelopSimulation";
+import SideBarAnalyseIcon from "../Icons/SideBarAnalyseIcon";
+import HorizontalGrayLine from "../Lines/HorizontalGrayLine";
 import CollapseItem from "./CollapseItem";
 import LogoutWrapper from "./LogoutWrapper";
-import { getSimDependantPageFullLink } from "../../lib/simulationConfigurationUtils";
 import DiceIcon from "../Icons/DiceIcon";
 
 interface Props {
@@ -216,6 +215,12 @@ const getSidebarElements = ({
         isSelected: [pages.monteCarloBatch(), pages.createMonteCarloBatch(), pages.editMonteCarloBatch()].includes(
           currentRoute,
         ),
+      },
+      {
+        id: "monteCarlo-files",
+        title: "Monte Carlo I/O Files",
+        link: pages.monteCarloFiles(),
+        isSelected: [pages.monteCarloFiles()].includes(currentRoute),
       },
       {
         id: "configuration-files",

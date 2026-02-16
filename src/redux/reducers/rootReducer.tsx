@@ -17,6 +17,7 @@ import simulatedSystemsReducer from "./simulatedSystemsReducer";
 import modelOutputsReducer from "./modelOutputsReducer";
 import selectedSimulationReducer from "./selectedSimulationReducer";
 import monteCarloBatchesReducer from "./monteCarloBatchesReducer";
+import monteCarloFilesReducer from "./monteCarloFilesReduce";
 
 const rootReducer = combineReducers({
   app: appReducer,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   modelOutputs: modelOutputsReducer,
   selectedSimulation: selectedSimulationReducer,
   monteCarloBatches: monteCarloBatchesReducer,
+  monteCarloFiles: monteCarloFilesReducer,
 });
 
 export default rootReducer;

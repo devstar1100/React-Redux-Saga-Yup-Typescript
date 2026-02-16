@@ -1,3 +1,5 @@
+import { string } from "yup";
+
 export const pages = {
   main: () => "/",
   simulationDashboard: () => "/simulation-dashboard",
@@ -13,6 +15,10 @@ export const pages = {
   customViewsList: () => "/custom-views-list",
   login: () => "/login",
   createCustomView: () => "/create-custom-view",
+  monteCarloFiles: () => "/monte-carlo-inputs-outputs-files",
+  editMonteCarloFile: (simulationId: number, filename: string) =>
+    `/edit-monte-carlo-inputs-outputs-file/${simulationId}/${filename}`,
+  addMonteCarloFile: () => "/create-monte-carlo-inputs-outputs-file",
   editCustomView: () => "/edit-custom-view",
   serverNodes: () => "/server-nodes",
   createServerNode: () => "/create-server-node",

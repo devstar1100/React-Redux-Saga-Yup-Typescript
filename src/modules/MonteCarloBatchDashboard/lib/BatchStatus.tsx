@@ -7,7 +7,7 @@ interface Props {
   data: MonteCarloBatch;
 }
 
-const BatchInStatus = ({ data }: Props) => {
+const BatchStatus = ({ data }: Props) => {
   const mappedData = [
     {
       id: "status",
@@ -42,7 +42,7 @@ const BatchInStatus = ({ data }: Props) => {
   );
 };
 
-export default React.memo(BatchInStatus, (prev, next) => {
+export default React.memo(BatchStatus, (prev, next) => {
   if (JSON.stringify(prev.data) !== JSON.stringify(next.data)) {
     return false;
   }

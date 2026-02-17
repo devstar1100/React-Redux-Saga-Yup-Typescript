@@ -54,6 +54,7 @@ const BreadcrumbsWrapper = (): ReactElement => {
     [pages.editSimulation()]: ["Edit Simulation"],
 
     [pages.monteCarloBatch()]: ["Monte Carlo Batches Config"],
+    [pages.monteCarloBatchDashboard()]: ["Monte Carlo Batch Status"],
     [pages.monteCarloBatchesList()]: ["Monte Carlo Batches"],
     [pages.createMonteCarloBatch()]: ["Create Monte Carlo Batch"],
     [pages.editMonteCarloBatch()]: ["Edit Monte Carlo Batch"],

@@ -8,6 +8,7 @@ export const EDIT_MONTECARLOBATCH_SERVER = "EDIT_MONTECARLOBATCH_SERVER";
 export const UPDATE_MONTECARLOBATCH_VALIDATION_ERRORS = "UPDATE_MONTECARLOBATCH_VALIDATION_ERRORS";
 export const DELETE_MONTECARLOBATCH_SERVER = "DELETE_MONTECARLOBATCH_SERVER";
 export const CLONE_MONTECARLOBATCH_SERVER = "CLONE_MONTECARLOBATCH_SERVER";
+export const SEND_BATCHCOMMAND_SERVER = "SEND_BATCHCOMMAND_SERVER";
 
 export interface RedirectProps {
   redirect?: (subroute?: string) => void;
@@ -68,5 +69,15 @@ export const addEditMonteCarloBatchServer = (props: AddMonteCarloBatchServerProp
       params: { ...props },
     },
     redirect: props.redirect,
+  },
+});
+
+export const sendBatchCommandServer = (props: { command: string; batchId: number }) => ({
+  type: SEND_BATCHCOMMAND_SERVER,
+  payload: {
+    request: {
+      method: "GET",
+      url: `/monte-carlo-batch-control/${props.command}/${props.batchId}`,
+    },
   },
 });

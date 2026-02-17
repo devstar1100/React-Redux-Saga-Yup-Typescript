@@ -12,7 +12,7 @@ export const formatMonteCarloBatchRow = (rows: MonteCarloBatch[], navigate: Navi
         align: "left",
         text: String(row["simulation-name"] ?? "-"),
         decorator: (text: string | ReactElement) => <u style={{ cursor: "pointer" }}>{text}</u>,
-        handler: () => navigate(`${pages.editMonteCarloBatch()}/${row["batch-id"]}`),
+        handler: () => navigate(`${pages.monteCarloBatchDashboard()}/${row["batch-id"]}`),
       },
       {
         align: "left",

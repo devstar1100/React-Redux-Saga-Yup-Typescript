@@ -36,6 +36,7 @@ import AddEditModelInput from "./modules/AddEditModelInput/AddEditModelInput";
 import MonteCarloBach from "./modules/MonteCarloBach/MonteCarloBach";
 import AddEditMonteCarloBatch from "./modules/AddEditMonteCarloBatch/AddEditMonteCarloBatch";
 import MonteCarloBatchesList from "./modules/MonteCarloBatchesList/monteCarloBatchesList";
+import MonteCarloBatchDashboard from "./modules/MonteCarloBatchDashboard";
 import MonteCarloFilesList from "./modules/MonteCarloFilesList";
 
 const Router = () => {
@@ -49,6 +50,7 @@ const Router = () => {
 
         <Route path={pages.main()} element={<PrivateRoute />}>
           <Route path={`${pages.simulationDashboard()}/:simulationId`} element={<SimulationDashboard />} />
+          <Route path={`${pages.monteCarloBatchDashboard()}/:batchId`} element={<MonteCarloBatchDashboard />} />
           <Route path={`${pages.simulationDashboard()}/:simulationId/:sessionId`} element={<SimulationDashboard />} />
           <Route
             path={`${pages.simulationDataBrowser()}/:simulationId/:sessionId`}

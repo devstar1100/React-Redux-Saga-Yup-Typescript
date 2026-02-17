@@ -24,9 +24,7 @@ export interface MonteCarloSession {
   "batch-id": number;
   "session-id": number;
   "run-index": number;
-
   "run-start-time": string; // ISO 8601 datetime
   "run-last-update-time": string; // ISO 8601 datetime
-
   "current-state": string;
 }

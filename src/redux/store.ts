@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { multiClientMiddleware } from "redux-axios-middleware";
-import createSagaMiddleware from "redux-saga";
 import { createStore, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
 import logger from "redux-logger";
 import { composeWithDevTools } from "redux-devtools-extension";
 
@@ -35,7 +35,7 @@ const makeStore: any = () => {
     persistedReducer,
     {},
     // composeWithDevTools(applyMiddleware(axiosMiddleware(client, options), sagaMiddleware)),
-    composeWithDevTools(applyMiddleware(multiClientMiddleware(clients, options), sagaMiddleware, logger)),
+    composeWithDevTools(applyMiddleware(multiClientMiddleware(clients, options), sagaMiddleware)),
   );
 
   store.__persistor = persistStore(store);

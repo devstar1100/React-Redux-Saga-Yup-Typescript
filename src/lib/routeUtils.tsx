@@ -7,6 +7,7 @@ export const pages = {
   simulationDataBrowser: () => "/simulation-data-browser",
   simulations: () => "/simulations",
   monteCarloBatchesList: () => "/monte-carlo-batches",
+  monteCarloBatchDashboard: () => "/monte-carlo-batch-status",
   createSimulation: () => "/create-simulation",
   editSimulation: () => "/edit-simulation",
   simulationUsers: () => "/simulation-users",

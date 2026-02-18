@@ -57,19 +57,25 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
     label: simulation["simulation-name"],
   }));
 
-  const [textFields, setTextFields] = useState<Record<string, string | number>>({
+  const [formData, setFormData] = useState<Record<string, string | number | undefined>>({
     filename: "",
     simulationName: "",
+    simulationId: 0,
+    numberOfInputsRecords: 0,
+    numberOfOutputsRecords: 0,
   });
-  const [fieldSimulationId, setFieldSimulationId] = useState<number>(isEditMode ? Number(simulationId) : -1);
+
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({
     filename: "",
     simulationName: "",
   });
 
-  const handleTextFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTextFields({ ...textFields, [e.target.name]: e.target.value });
-    setFieldErrors({ ...fieldErrors, [e.target.name]: validation(e.target.name, e.target.value) });
+  const handleInputChange = (key: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [key]: e.target.value });
+    setFieldErrors({ ...fieldErrors, [key]: validation(key, e.target.value) });
+  };
+  const handleSelectChange = (key: keyof typeof formData) => (value: string) => {
+    setFormData({ ...formData, [key]: value });
   };
 
   const validation = (name: string, value: string | number) => {
@@ -90,17 +96,29 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
   const handleUploadFileName = (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
     const fileName = e.target.files?.[0].name;
     if (!fileName) return;
-    setTextFields({ ...textFields, [key]: fileName });
+    setFormData({ ...formData, [key]: fileName });
+  };
+
+  const handleSimulationChange = (newValue: number) => {
+    setFormData({ ...formData, simulationId: newValue });
   };
 
   useEffect(() => {
     dispatch(getMonteCarloFilesServer());
     dispatch(getSimulationsExtendedInfoServer({}));
-    setTextFields({
-      filename: isEditMode ? (filename as string) : "",
-      simulationName: "",
-    });
   }, []);
+
+  useEffect(() => {
+    setFormData({
+      filename: isEditMode ? (filename as string) : "",
+      simulationName: isEditMode
+        ? simulationNameItems.find((item) => item.id === currentMonteCarloFile?.["simulation-id"])?.label
+        : "",
+      simulationId: isEditMode ? Number(currentMonteCarloFile?.["simulation-id"]) : undefined,
+      numberOfInputsRecords: isEditMode ? Number(currentMonteCarloFile?.["number-of-input-records"]) : 0,
+      numberOfOutputsRecords: isEditMode ? Number(currentMonteCarloFile?.["number-of-output-records"]) : 0,
+    });
+  }, [currentMonteCarloFile]);
 
   useEffect(() => {
     if (monteCarloFileValidationErrors.length) {
@@ -120,19 +138,19 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
   const handleSubmit = () => {
     const isValid =
       Object.values(fieldErrors).every((error) => error === "") &&
-      Object.values(textFields).every((value) => String(value) !== "") &&
+      Object.values(formData).every((value) => String(value) !== "") &&
       isEditMode
         ? true
-        : fieldSimulationId !== -1;
+        : formData.simulationId !== undefined;
 
     if (isValid) {
       dispatch(
         manageMonteCarloFileServer({
-          "simulation-id": fieldSimulationId,
-          "file-name": isEditMode ? (filename as string) : (textFields.filename as string),
+          "simulation-id": Number(simulationId),
+          "file-name": isEditMode ? (filename as string) : (formData.filename as string),
           "action-type": isEditMode ? "edit" : "add",
-          "new-simulation-id": fieldSimulationId,
-          "new-filename": textFields.filename as string,
+          "new-simulation-id": formData.simulationId as number,
+          "new-filename": formData.filename as string,
           redirect: () => navigate(pages.monteCarloFiles()),
         }),
       );
@@ -180,7 +198,7 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
                   error={!!fieldErrors.filename}
                   helperText={fieldErrors.filename}
                   placeholder="Enter input/Output Parameters File"
-                  value={textFields.filename}
+                  value={formData.filename as string}
                   InputProps={{
                     endAdornment: (
                       <UploadWrapper>
@@ -189,7 +207,7 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
                       </UploadWrapper>
                     ),
                   }}
-                  handleChange={handleTextFieldChange}
+                  handleChange={handleInputChange("filename")}
                 />
               }
             />
@@ -198,7 +216,11 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
               requireField
               title="Simulation Name"
               content={
-                <Select value={fieldSimulationId} onChange={setFieldSimulationId} options={simulationNameItems} />
+                <Select
+                  value={formData.simulationId as number}
+                  onChange={handleSelectChange("simulationId")}
+                  options={simulationNameItems}
+                />
               }
             />
 
@@ -207,13 +229,13 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
               content={
                 <Grid container gap="4px" direction="column">
                   <Typography variant="body2" color="main.100">
-                    Simulation ID: {fieldSimulationId !== -1 ? fieldSimulationId : undefined}
+                    Simulation ID: {formData.simulationId}
                   </Typography>
                   <Typography variant="body2" color="main.100">
-                    Number of Input Records: {currentMonteCarloFile?.["number-of-input-records"] || 0}
+                    Number of Input Records: {formData.numberOfInputsRecords}
                   </Typography>
                   <Typography variant="body2" color="main.100">
-                    Number of Output Records: {currentMonteCarloFile?.["number-of-output-records"] || 0}
+                    Number of Output Records: {formData.numberOfOutputsRecords}
                   </Typography>
                 </Grid>
               }

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSelectedFilters, hasAnyLength } from "../../lib/tableFilterHelpers";
 import { getAreSimulationsLoading, getSimulations } from "../../redux/reducers/simulationsReducer";
 import { getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
-import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
+import { getMonteCarloBatchesListServer } from "../../redux/actions/monteCarloBatchesActions";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
 import { getAreMonteCarloBatchesLoading, getMonteCarloBatches } from "../../redux/reducers/monteCarloBatchesReducer";
 import { Simulation } from "../../types/simulations";

@@ -13,12 +13,12 @@ import { pages } from "../../lib/routeUtils";
 import { getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
 import { getSimulations } from "../../redux/reducers/simulationsReducer";
 import Alert, { AlertVariant } from "../../components/Alert/Alert";
-import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
+import { getMonteCarloBatchesListServer } from "../../redux/actions/monteCarloBatchesActions";
 import {
   getMonteCarloBatches,
   getMonteCarloBatchValidationErrors,
 } from "../../redux/reducers/monteCarloBatchesReducer";
-import { addEditMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
+import { addEditMonteCarloBatchServer } from "../../redux/actions/monteCarloBatchActions";
 import { updateSimulationValidationErrors } from "../../redux/actions/simulationActions";
 import { UploadIcon } from "../../components/Icons/UploadIcon";
 import { getUserData } from "../../redux/reducers/authReducer";

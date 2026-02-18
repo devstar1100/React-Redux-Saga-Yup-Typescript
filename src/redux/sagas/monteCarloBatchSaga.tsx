@@ -4,10 +4,10 @@ import {
   DELETE_MONTECARLOBATCH_SERVER,
   EDIT_MONTECARLOBATCH_SERVER,
   updateMonteCarloBatchValidationErrors,
-} from "../actions/MonteCarloBatchActions";
+} from "../actions/monteCarloBatchActions";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
 import { getMonteCarloBatches } from "../reducers/monteCarloBatchesReducer";
-import { updateMonteCarloBatchesList } from "../actions/MonteCarloBatchesActions";
+import { updateMonteCarloBatchesList } from "../actions/monteCarloBatchesActions";
 import { put, select, takeEvery } from "redux-saga/effects";
 import { successActionType } from "../../lib/successActionType";
 import { failActionType } from "../../lib/failActionType";
@@ -62,7 +62,7 @@ function* editMonteCarloBatchSuccessHandler(action: any) {
   const monteCarloBatchesList = getMonteCarloBatches(yield select());
 
   const nextMonteCarloBatches = monteCarloBatchesList.map((item) =>
-    item["simulation-id"] === response["simulation-id"] ? { ...item, ...response } : item,
+    item["batch-id"] === response["batch-id"] ? { ...item, ...response } : item,
   );
 
   yield put(updateMonteCarloBatchesList(nextMonteCarloBatches));

@@ -17,10 +17,10 @@ import { formatMonteCarloBatchRow } from "./lib/MonteCarloBatchRowMapper";
 import { getAreSimulationsLoading, getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
 import { getEnumeratorsServer, getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
 import { pages } from "../../lib/routeUtils";
-import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
+import { getMonteCarloBatchesListServer } from "../../redux/actions/monteCarloBatchesActions";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
 import { getAreMonteCarloBatchesLoading, getMonteCarloBatches } from "../../redux/reducers/monteCarloBatchesReducer";
-import { cloneMonteCarloBatchServer, deleteMonteCarloBatchServer } from "../../redux/actions/MonteCarloBatchActions";
+import { cloneMonteCarloBatchServer, deleteMonteCarloBatchServer } from "../../redux/actions/monteCarloBatchActions";
 import { Simulation } from "../../types/simulations";
 
 interface FilterVariantValue {

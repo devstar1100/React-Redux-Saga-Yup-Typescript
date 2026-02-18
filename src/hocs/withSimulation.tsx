@@ -63,7 +63,7 @@ const withSimulation = (Component: any, refreshIntervalMs?: number) => {
     const isDataFetched = useRef(false);
 
     const fetchAllData = (disableLoaders?: boolean) => {
-      if (simulationId) {
+      if (simulationId && sessionId) {
         dispatch(getSimulationCustomViewsServer(+simulationId));
         dispatch(getSimulationDataServer({ simulationId: +simulationId, disableLoaders }));
         dispatch(getConfigurationFilesServer({}));

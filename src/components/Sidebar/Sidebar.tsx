@@ -203,7 +203,7 @@ const getSidebarElements = ({
       {
         id: "simulations-catalogue",
         title: "Simulations",
-        link: "/simulation-catalogue",
+        link: pages.simulationCatalogue(),
         isSelected: [pages.simulationCatalogue(), pages.createSimulation(), pages.editSimulation()].includes(
           currentRoute,
         ),

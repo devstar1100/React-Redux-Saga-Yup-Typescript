@@ -10,7 +10,7 @@ import { getSimulationsExtendedInfoServer } from "../../redux/actions/simulation
 import { pages } from "../../lib/routeUtils";
 import { Simulation } from "../../types/simulations";
 import { getMonteCarloFilesServer, manageMonteCarloFileServer } from "../../redux/actions/monteCarloFilesActions";
-import { getCurrentMonteCarloFiles, getIsMonteCarloFilesLoading } from "../../redux/reducers/monteCarloFilesReduce";
+import { getCurrentMonteCarloFiles, getIsMonteCarloFilesLoading } from "../../redux/reducers/monteCarloFilesReducer";
 import { MonteCarloFile } from "../../types/monteCarloFile";
 import { formatMonteCarloFileRow } from "./lib/rowMapper";
 import withSimulation from "../../hocs/withSimulation";
@@ -123,7 +123,7 @@ const MonteCarloFilesList = () => {
 
   const selectedTableElements = rows.filter(filterRows).filter((item) => item.checked);
 
-  const handleActionScenarioFiles = (ActionType: "clone" | "delete") => {
+  const handleActionMonteCarloFiles = (ActionType: "clone" | "delete") => {
     selectedTableElements.forEach((row) =>
       dispatch(
         manageMonteCarloFileServer({
@@ -145,8 +145,6 @@ const MonteCarloFilesList = () => {
   }, []);
 
   useEffect(() => {
-    if (!simulationListServer.length) return;
-    if (!monteCarloFilesServer.length) return;
     const rowsServer = addSimulationNameToRowsServer(simulationListServer, monteCarloFilesServer);
     const rows: Row[] = formatMonteCarloFileRow(rowsServer, navigate);
     setRows(rows);
@@ -224,10 +222,10 @@ const MonteCarloFilesList = () => {
           <FooterActions>
             <SelectedCount>{selectedTableElements.length} Item Selected</SelectedCount>
             <Buttons>
-              <Button color="blue" onClick={() => handleActionScenarioFiles("clone")}>
+              <Button color="blue" onClick={() => handleActionMonteCarloFiles("clone")}>
                 Clone selected batches
               </Button>
-              <Button color="red" onClick={() => handleActionScenarioFiles("delete")}>
+              <Button color="red" onClick={() => handleActionMonteCarloFiles("delete")}>
                 Delete selected batches
               </Button>
             </Buttons>

@@ -16,7 +16,7 @@ import { simulatedSystemsStateType } from "../reducers/simulatedSystemsReducer";
 import { modelOutputsStateType } from "../reducers/modelOutputsReducer";
 import { selectedSimulationStateType } from "../reducers/selectedSimulationReducer";
 import { monteCarloBatchesStateType } from "../reducers/monteCarloBatchesReducer";
-import { monteCarloFilesStateType } from "../reducers/monteCarloFilesReduce";
+import { monteCarloFilesStateType } from "../reducers/monteCarloFilesReducer";
 
 export interface StoreType {
   app: appStateType;

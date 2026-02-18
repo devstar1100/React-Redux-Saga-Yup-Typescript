@@ -59,7 +59,9 @@ const BreadcrumbsWrapper = (): ReactElement => {
     [pages.createMonteCarloBatch()]: ["Create Monte Carlo Batch"],
     [pages.editMonteCarloBatch()]: ["Edit Monte Carlo Batch"],
 
-    [pages.monteCarloFiles()]: ["Monte Carlo Inputs And Outputs Files List"],
+    [pages.monteCarloFiles()]: ["Monte Carlo Inputs and Outputs Files List"],
+    [pages.editMonteCarloFile()]: ["Monte Carlo Inputs and Outputs File Edit"],
+    [pages.createMonteCarloFile()]: ["Monte Carlo Inputs and Outputs File Create"],
 
     [pages.customViewsList()]: ["Custom Views"],
     [pages.customView()]: getSimulationNavLinks(

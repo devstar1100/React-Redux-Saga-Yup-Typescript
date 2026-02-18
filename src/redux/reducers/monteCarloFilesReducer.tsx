@@ -5,13 +5,12 @@ import { StoreType } from "../types/store.types";
 import {
   UPDATE_MONTECARLO_FILES_DATA,
   UPDATE_IS_MONTECARLO_FILES_LOADING,
-  UPDATE_IS_MONTECARLO_FILES_EDIT_MODE,
+  UPDATE_MONTECARLO_FILE_VALIDATION_ERRORS,
 } from "../actions/monteCarloFilesActions";
 
 export interface monteCarloFilesStateType {
   data: MonteCarloFile[];
   isLoading: boolean;
-  isEditMode: boolean;
   validationErrors: ValidationError[];
 }
 
@@ -19,7 +18,6 @@ export const MonteCarloFilesInitialState: monteCarloFilesStateType = {
   data: [],
   validationErrors: [],
   isLoading: false,
-  isEditMode: false,
 };
 
 const monteCarloFilesReducer = (state = MonteCarloFilesInitialState, action: any) => {
@@ -28,8 +26,11 @@ const monteCarloFilesReducer = (state = MonteCarloFilesInitialState, action: any
       return { ...state, data: action.payload };
     case UPDATE_IS_MONTECARLO_FILES_LOADING:
       return { ...state, isLoading: action.payload };
-    case UPDATE_IS_MONTECARLO_FILES_EDIT_MODE:
-      return { ...state, isEditMode: action.payload };
+    case UPDATE_MONTECARLO_FILE_VALIDATION_ERRORS: {
+      const payload = action.payload;
+      const validationErrors = Array.isArray(payload) ? payload : [];
+      return { ...state, validationErrors };
+    }
     default:
       return { ...state };
   }
@@ -37,5 +38,6 @@ const monteCarloFilesReducer = (state = MonteCarloFilesInitialState, action: any
 
 export const getCurrentMonteCarloFiles = (state: StoreType) => state.monteCarloFiles.data;
 export const getIsMonteCarloFilesLoading = (state: StoreType) => state.monteCarloFiles.isLoading;
+export const getMonteCarloFileValidationErrors = (state: StoreType) => state.monteCarloFiles.validationErrors;
 
 export default monteCarloFilesReducer;

@@ -2,7 +2,7 @@ import React, { FC, Fragment, ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Grid, GridProps, styled } from "@mui/material";
 import { preventForwardProps } from "../../../lib/preventForwardProps";
-import { sendBatchCommandServer } from "../../../redux/actions/MonteCarloBatchActions";
+import { sendBatchCommandServer } from "../../../redux/actions/monteCarloBatchActions";
 import Container, { DisplayElementId } from "../../../components/WidgetContainer/WidgetContainer";
 import ControlLaunchIcon from "../../../components/Icons/ControlLaunchIcon";
 import ControlGoIcon from "../../../components/Icons/ControlGoIcon";

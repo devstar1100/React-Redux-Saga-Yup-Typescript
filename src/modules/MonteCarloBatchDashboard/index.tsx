@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { getSimulations } from "../../redux/reducers/simulationsReducer";
 import { useDispatch } from "react-redux";
 import { getSimulationsExtendedInfoServer } from "../../redux/actions/simulationsActions";
-import { getMonteCarloBatchesListServer } from "../../redux/actions/MonteCarloBatchesActions";
+import { getMonteCarloBatchesListServer } from "../../redux/actions/monteCarloBatchesActions";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
 import Seo from "../../components/Seo/Seo";
 import withSimulation from "../../hocs/withSimulation";

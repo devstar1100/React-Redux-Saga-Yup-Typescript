@@ -4,7 +4,7 @@ import {
   GET_MONTECARLOBATCHESLIST_SERVER,
   updateAreMonteCarloBatchesListLoading,
   updateMonteCarloBatchesList,
-} from "../actions/MonteCarloBatchesActions";
+} from "../actions/monteCarloBatchesActions";
 import { failActionType } from "../../lib/failActionType";
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
 

@@ -13,7 +13,7 @@ export const formatMonteCarloFileRow = (rows: MonteCarloFile[], navigate: Naviga
         align: "left",
         text: String(row["name"] ?? "-"),
         decorator: (text: string | ReactElement) => <u style={{ cursor: "pointer" }}>{text}</u>,
-        handler: () => navigate(`${pages.editMonteCarloFile(row["simulation-id"], row.name)}`),
+        handler: () => navigate(`${pages.editMonteCarloFile()}/${row["simulation-id"]}/${row.name}`),
       },
       {
         align: "left",
@@ -31,7 +31,7 @@ export const formatMonteCarloFileRow = (rows: MonteCarloFile[], navigate: Naviga
         align: "center",
         text: "View list",
         decorator: (text: string | ReactElement) => <u style={{ cursor: "pointer" }}>{text}</u>,
-        handler: () => navigate(`${pages.addMonteCarloFile()}`),
+        handler: () => navigate(`${pages.monteCarloRecord()}/${row["simulation-id"]}/${row.name}`),
       },
     ],
   }));

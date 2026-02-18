@@ -38,6 +38,7 @@ import AddEditMonteCarloBatch from "./modules/AddEditMonteCarloBatch/AddEditMont
 import MonteCarloBatchesList from "./modules/MonteCarloBatchesList/monteCarloBatchesList";
 import MonteCarloBatchDashboard from "./modules/MonteCarloBatchDashboard";
 import MonteCarloFilesList from "./modules/MonteCarloFilesList";
+import AddEditMonteCarloFile from "./modules/AddEditMonteCarloFile";
 
 const Router = () => {
   return (
@@ -62,7 +63,14 @@ const Router = () => {
           <Route path={pages.createSimulation()} element={<AddEditSimulation />} />
           <Route path={`${pages.editSimulation()}/:simulationId`} element={<AddEditSimulation isEditMode />} />
           <Route path={pages.configurationFiles()} element={<ConfigurationFilesList />} />
+
           <Route path={pages.monteCarloFiles()} element={<MonteCarloFilesList />} />
+          <Route
+            path={`${pages.editMonteCarloFile()}/:simulationId/:filename`}
+            element={<AddEditMonteCarloFile isEditMode />}
+          />
+          <Route path={pages.createMonteCarloFile()} element={<AddEditMonteCarloFile />} />
+
           <Route
             path={`${pages.modifyConfigurationFile()}/:fileId`}
             element={<AddConfigurationFile pageMode={"edit"} />}

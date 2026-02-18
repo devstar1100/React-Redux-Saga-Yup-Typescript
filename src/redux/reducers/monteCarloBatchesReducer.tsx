@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MonteCarloBatch } from "../../types/monteCarloBatches";
 import { ValidationError } from "../../types/validationError";
-import { UPDATE_MONTECARLOBATCH_VALIDATION_ERRORS } from "../actions/MonteCarloBatchActions";
+import { UPDATE_MONTECARLOBATCH_VALIDATION_ERRORS } from "../actions/monteCarloBatchActions";
 import {
   UPDATE_ARE_MONTECARLOBATCHESLIST_LOADING,
   UPDATE_MONTECARLOBATCHES,
-} from "../actions/MonteCarloBatchesActions";
+} from "../actions/monteCarloBatchesActions";
 
 import { StoreType } from "../types/store.types";
 
 export interface monteCarloBatchesStateType {
   monteCarloBatches: MonteCarloBatch[];
-  areLoading: boolean;
+  isLoading: boolean;
   validationErrors: ValidationError[];
 }
 
 export const monteCarloBatchesInitialState: monteCarloBatchesStateType = {
   monteCarloBatches: [],
-  areLoading: false,
+  isLoading: false,
   validationErrors: [],
 };
 
@@ -26,7 +26,7 @@ const monteCarloBatchesReducer = (state = monteCarloBatchesInitialState, action:
     case UPDATE_MONTECARLOBATCHES:
       return { ...state, monteCarloBatches: action.payload };
     case UPDATE_ARE_MONTECARLOBATCHESLIST_LOADING:
-      return { ...state, areLoading: action.payload };
+      return { ...state, isLoading: action.payload };
     case UPDATE_MONTECARLOBATCH_VALIDATION_ERRORS: {
       const payload = action.payload;
       const validationErrors = Array.isArray(payload) ? payload : [];
@@ -38,7 +38,7 @@ const monteCarloBatchesReducer = (state = monteCarloBatchesInitialState, action:
 };
 
 export const getMonteCarloBatches = (state: StoreType) => state.monteCarloBatches.monteCarloBatches;
-export const getAreMonteCarloBatchesLoading = (state: StoreType) => state.monteCarloBatches.areLoading;
+export const getAreMonteCarloBatchesLoading = (state: StoreType) => state.monteCarloBatches.isLoading;
 export const getMonteCarloBatchValidationErrors = (state: StoreType) => state.monteCarloBatches.validationErrors;
 
 export default monteCarloBatchesReducer;

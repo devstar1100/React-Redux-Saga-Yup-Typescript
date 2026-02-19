@@ -71,10 +71,7 @@ const Router = () => {
             element={<AddEditMonteCarloFile isEditMode />}
           />
           <Route path={pages.createMonteCarloFile()} element={<AddEditMonteCarloFile />} />
-          <Route
-            path={`${pages.monteCarloRecords()}/:simulationId/:filename`}
-            element={<MonteCarloRecordsList isEditMode />}
-          />
+          <Route path={`${pages.monteCarloRecords()}/:simulationId/:filename`} element={<MonteCarloRecordsList />} />
 
           <Route
             path={`${pages.modifyConfigurationFile()}/:fileId`}

@@ -16,6 +16,7 @@ import monteCarloBatchesSaga from "./monteCarloBatchesSaga";
 import monteCarloFilesSaga from "./monteCarloFilesSaga";
 import monteCarloBatchSaga from "./monteCarloBatchSaga";
 import simulatedModelsSaga from "./simulatedModelsSaga";
+import monteCarloRecordsSaga from "./monteCarloRecordsSaga";
 
 function* rootSaga() {
   yield all([
@@ -36,6 +37,7 @@ function* rootSaga() {
     ...monteCarloBatchesSaga,
     ...monteCarloBatchSaga,
     ...monteCarloFilesSaga,
+    ...monteCarloRecordsSaga,
   ]);
 }
 

@@ -1,5 +1,3 @@
-import { string } from "yup";
-
 export const pages = {
   main: () => "/",
   simulationDashboard: () => "/simulation-dashboard",
@@ -30,7 +28,9 @@ export const pages = {
   monteCarloBatch: () => "/monte-carlo-batches-config",
   createMonteCarloBatch: () => "/create-monte-carlo-batch",
   editMonteCarloBatch: () => "/edit-monte-carlo-batch-config",
-  monteCarloRecord: () => "/monte-carlo-input-output-records",
+  monteCarloRecords: () => "/monte-carlo-input-output-records",
+  editMonteCarloRecord: () => "/edit-monte-carlo-inputs-outputs-record",
+  addMonteCarloRecord: () => "/create-monte-carlo-inputs-outputs-record",
   scenarioFiles: () => "/scenario-files",
   editScenarioFile: () => "/edit-scenario-file",
   createScenarioFile: () => "/create-scenario-file",

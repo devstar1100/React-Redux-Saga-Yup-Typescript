@@ -12,13 +12,13 @@ export const UPDATE_MONTECARLO_RECORD_VALIDATION_ERRORS = "UPDATE_MONTECARLO_REC
 
 export interface ManageMonteCarloRecordsProps {
   "new-description"?: string;
-  "record-type"?: "SELECTED_OUTPUT" | "RANDOMIZED_INPUT";
+  "record-type"?: string;
   "parameter-path"?: string;
-  "parameter-value"?: number;
-  "parameter-stddev"?: number;
-  "simulation-id": number;
-  filename: string;
-  description: string;
+  "parameter-value"?: string | number;
+  "parameter-stddev"?: string | number;
+  "simulation-id": string | number;
+  filename?: string;
+  description?: string;
   "action-type": string;
 }
 

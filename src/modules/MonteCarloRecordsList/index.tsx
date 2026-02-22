@@ -168,7 +168,11 @@ const MonteCarloRecordsList = () => {
           <SearchIcon />
         </SearchWrapper>
         <AddConfigurationWrapper>
-          <Button color="blue" size="small" href={`pages.addMonteCarloRecord()/${simulationId}/${filename}`}>
+          <Button
+            color="blue"
+            size="small"
+            onClick={() => navigate(`${pages.addMonteCarloRecord()}/${simulationId}/${filename}`)}
+          >
             Add New Record
           </Button>
         </AddConfigurationWrapper>

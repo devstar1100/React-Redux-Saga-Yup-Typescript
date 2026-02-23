@@ -40,6 +40,7 @@ import MonteCarloBatchDashboard from "./modules/MonteCarloBatchDashboard";
 import MonteCarloFilesList from "./modules/MonteCarloFilesList";
 import AddEditMonteCarloFile from "./modules/AddEditMonteCarloFile";
 import MonteCarloRecordsList from "./modules/MonteCarloRecordsList";
+import AddEditMonteCarloRecord from "./modules/AddEditMonteCarloRecord/AddEditMonteCarloRecord";
 
 const Router = () => {
   return (
@@ -71,13 +72,22 @@ const Router = () => {
             element={<AddEditMonteCarloFile isEditMode />}
           />
           <Route path={pages.createMonteCarloFile()} element={<AddEditMonteCarloFile />} />
+
           <Route path={`${pages.monteCarloRecords()}/:simulationId/:filename`} element={<MonteCarloRecordsList />} />
+          <Route
+            path={`${pages.editMonteCarloRecord()}/:simulationId/:filename/:description`}
+            element={<AddEditMonteCarloRecord isEditMode />}
+          />
+          <Route
+            path={`${pages.addMonteCarloRecord()}/:simulationId/:filename`}
+            element={<AddEditMonteCarloRecord />}
+          />
 
           <Route
             path={`${pages.modifyConfigurationFile()}/:fileId`}
             element={<AddConfigurationFile pageMode={"edit"} />}
           />
-          <Route path={`${pages.modifyConfigurationFile()}`} element={<AddConfigurationFile pageMode={"create"} />} />
+          <Route path={`${pages.modifyConfigurationFile()}`} element={<AddConfigurationFile pageMode={"edit"} />} />
           <Route path={pages.simulationUsers()} element={<SimulationUsers />} />
           <Route path={pages.simulationCatalogue()} element={<SimulationCatalogue />} />
 

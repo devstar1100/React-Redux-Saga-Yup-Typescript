@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { NavigateFunction } from "react-router";
-import { Row } from "../../../components/Tables/CheckboxTable/CheckboxTable";
+import { Row } from "../../../components/Tables/CheckboxTable";
 import { pages } from "../../../lib/routeUtils";
 import { MonteCarloFile } from "../../../types/monteCarloFile";
 

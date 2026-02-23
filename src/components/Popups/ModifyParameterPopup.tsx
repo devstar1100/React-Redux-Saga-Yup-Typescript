@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { getModifyParameterPopupState, getPopupPrefilledInfo } from "../../redux/reducers/popupsReducer";
-import SmallModalWrapper, { SmallModalType } from "../SmallModalWrapper/SmallModalWrapper";
+import SmallModalWrapper, { SmallModalType } from "../SmallModalWrapper";
 import { useDispatch } from "react-redux";
 import { updatePopup } from "../../redux/actions/popupsActions";
 import { Popups } from "../../types/popups";
 import { Grid, Typography, styled } from "@mui/material";
-import Button from "../Button/Button";
-import NumericFormat from "../NumericFormat/NumericFormat";
-import Input from "../Inputs/Input";
+import Button from "../Button";
+import NumericFormat from "../NumericFormat";
+import Input from "../Inputs";
 import { setScenarioParameterServer } from "../../redux/actions/simulationActions";
 
 export interface ModifyParamPopupProps {

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { NavigateFunction } from "react-router";
-import { Filter, Row } from "../../../components/Tables/CheckboxTable/CheckboxTable";
+import { Filter, Row } from "../../../components/Tables/CheckboxTable";
 import { pages } from "../../../lib/routeUtils";
 import { Simulation } from "../../../types/simulations";
 import { format, parseISO } from "date-fns";

@@ -6,7 +6,7 @@ import { searchMatch } from "../../lib/searchMatch";
 import { getSelectedFilters, hasAnyLength } from "../../lib/tableFilterHelpers";
 import { ActiveFilter, CloseBtn } from "../../components/Tables/CheckboxTable/components/ActiveFilter";
 import { getMonteCarloRecordsServer, manageMonteCarloRecordServer } from "../../redux/actions/monteCarloRecordsActions";
-import CheckboxTable, { Filter, Header, Row, Sort } from "../../components/Tables/CheckboxTable/CheckboxTable";
+import CheckboxTable, { Filter, Header, Row, Sort } from "../../components/Tables/CheckboxTable";
 import { MonteCarloRecord } from "../../types/monteCarloRecords";
 import { formatMonteCarloRecordsRow } from "./lib/rowMapper";
 import { pages } from "../../lib/routeUtils";
@@ -15,11 +15,11 @@ import {
   getIsMonteCarloRecordsLoading,
 } from "../../redux/reducers/monteCarloRecordsReducer";
 import withSimulation from "../../hocs/withSimulation";
-import Input from "../../components/Inputs/Input";
-import Button from "../../components/Button/Button";
-import TableFilter from "../../components/TableFilter/TableFilter";
+import Input from "../../components/Inputs";
+import Button from "../../components/Button";
+import TableFilter from "../../components/TableFilter";
 import SearchIcon from "../../components/Icons/SearchIcon";
-import PageLoader from "../../components/PageLoader/PageLoader";
+import PageLoader from "../../components/PageLoader";
 import ArrowDownIcon from "../../components/Icons/ArrowDownIcon";
 
 interface FilterVariantValue {

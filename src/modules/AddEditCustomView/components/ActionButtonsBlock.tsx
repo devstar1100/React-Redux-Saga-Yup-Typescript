@@ -1,5 +1,5 @@
 import { Grid, styled } from "@mui/material";
-import Button from "../../../components/Button/Button";
+import Button from "../../../components/Button";
 
 interface Props {
   onConfirm: () => void;

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { Filter } from "../components/Tables/CheckboxTable/CheckboxTable";
-import { FilterVariant, FilterVariants } from "../modules/ConfigurationView/ConfigurationFilesList";
+import { Filter } from "../components/Tables/CheckboxTable";
+import { FilterVariant, FilterVariants } from "../modules/ConfigurationView";
 
 interface Props {
   tableColIndex: number;

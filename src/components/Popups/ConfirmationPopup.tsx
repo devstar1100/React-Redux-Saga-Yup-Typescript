@@ -1,8 +1,8 @@
 import { Grid, Typography, styled } from "@mui/material";
 import { useSelector } from "react-redux";
 
-import SmallModalWrapper, { SmallModalType } from "../SmallModalWrapper/SmallModalWrapper";
-import Button, { CustomButtonProps } from "../Button/Button";
+import SmallModalWrapper, { SmallModalType } from "../SmallModalWrapper";
+import Button, { CustomButtonProps } from "../Button";
 import { getConfirmationPopupState, getPopupPrefilledInfo } from "../../redux/reducers/popupsReducer";
 import { useDispatch } from "react-redux";
 import { updatePopup } from "../../redux/actions/popupsActions";

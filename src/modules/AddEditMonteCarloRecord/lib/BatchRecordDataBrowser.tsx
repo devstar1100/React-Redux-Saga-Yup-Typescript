@@ -14,11 +14,11 @@ import ComputerIcon from "../../../components/Icons/ComputerIcon";
 import NetworkIcon from "../../../components/Icons/NetworkIcon";
 import ChipIcon from "../../../components/Icons/ChipIcon";
 import ServersIcon from "../../../components/Icons/ServersIcon";
-import Seo from "../../../components/Seo/Seo";
-import Input from "../../../components/Inputs/Input";
+import Seo from "../../../components/Seo";
+import Input from "../../../components/Inputs";
 import SearchIcon from "../../../components/Icons/SearchIcon";
 import Select from "../../../components/Select";
-import MultiSelect from "../../../components/MultiSelect/MultiSelect";
+import MultiSelect from "../../../components/MultiSelect";
 
 interface Props {
   sessionId: number;

@@ -5,9 +5,9 @@ import { ViewportList } from "react-viewport-list";
 
 import IconMinus from "../../../components/Icons/IconMinus";
 import IconPlus from "../../../components/Icons/IconPlus";
-import Container from "../../../components/WidgetContainer/WidgetContainer";
+import Container from "../../../components/WidgetContainer";
 import TreeItem, { TreeItemData } from "./TreeItem";
-import Textfield from "../../../components/Textfield/Textfield";
+import Textfield from "../../../components/Textfield";
 import SearchIcon from "../../../components/Icons/SearchIcon";
 import { useDispatch } from "react-redux";
 import { updatePopup } from "../../../redux/actions/popupsActions";

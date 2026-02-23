@@ -2,7 +2,7 @@ import { Grid, styled } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Navigation from "../components/Navigation/Navigation";
+import Navigation from "../components/Navigation";
 import Sidebar from "../components/Sidebar/Sidebar";
 
 import {

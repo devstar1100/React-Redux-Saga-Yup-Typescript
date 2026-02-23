@@ -3,14 +3,14 @@ import { useDispatch } from "react-redux";
 import { Grid, GridProps, styled } from "@mui/material";
 import { preventForwardProps } from "../../../lib/preventForwardProps";
 import { sendBatchCommandServer } from "../../../redux/actions/monteCarloBatchActions";
-import Container, { DisplayElementId } from "../../../components/WidgetContainer/WidgetContainer";
+import Container, { DisplayElementId } from "../../../components/WidgetContainer";
 import ControlLaunchIcon from "../../../components/Icons/ControlLaunchIcon";
 import ControlGoIcon from "../../../components/Icons/ControlGoIcon";
 import ControlPauseIcon from "../../../components/Icons/ControlPauseIcon";
 import ControlTerminateIcon from "../../../components/Icons/ControlTerminateIcon";
 import GradientVerticalLine from "../../../components/Lines/GradientVertivalLine";
 import GradientHorizontalLine from "../../../components/Lines/GradientHorizontalLine";
-import ControlIcon from "../../../components/ControlUnit/ControlUnit";
+import ControlIcon from "../../../components/ControlUnit";
 
 export interface ISimulationControl {
   batchId: number;

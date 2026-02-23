@@ -2,7 +2,7 @@ import { Grid, Typography, styled } from "@mui/material";
 
 import InfoIcon from "../Icons/InfoIcon";
 import CrossIcon from "../Icons/CrossIcon";
-import SmallModalWrapper, { SmallModalWrapperProps } from "../SmallModalWrapper/SmallModalWrapper";
+import SmallModalWrapper, { SmallModalWrapperProps } from "../SmallModalWrapper";
 
 type Props = SmallModalWrapperProps & {
   title: string;

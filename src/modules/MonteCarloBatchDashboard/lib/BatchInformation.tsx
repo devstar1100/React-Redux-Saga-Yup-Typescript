@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "../../../components/WidgetContainer/WidgetContainer";
+import Container from "../../../components/WidgetContainer";
 import DataTable from "../../../components/Tables/DataTable";
 import { MonteCarloBatch } from "../../../types/monteCarloBatches";
 

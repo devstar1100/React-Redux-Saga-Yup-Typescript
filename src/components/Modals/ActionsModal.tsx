@@ -1,6 +1,6 @@
 import { Grid, styled } from "@mui/material";
 
-import SmallModalWrapper, { SmallModalWrapperProps } from "../SmallModalWrapper/SmallModalWrapper";
+import SmallModalWrapper, { SmallModalWrapperProps } from "../SmallModalWrapper";
 import { ActionsList } from "../../types/actions";
 
 type Props = SmallModalWrapperProps & {

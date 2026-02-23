@@ -2,24 +2,24 @@ import { useEffect, useRef } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
-import Input from "../../Inputs/Input";
+import Input from "../../Inputs";
 import Select from "../../Select";
 import SearchIcon from "../../Icons/SearchIcon";
 import withAddWidget, { FilterOption, WidgetGeneralVars, WidgetUnit } from "../../../hocs/withAddWidget";
-import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable/ReorderTable";
+import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable";
 import { Popups } from "../../../types/popups";
 import { getTheme } from "../../../lib/theme/theme";
 import { ChartTypeName, DataSetColor, DisplayElementType } from "../../../types/customViews";
 import { AddWidgetPopupProps } from "../../../types/addWidgetPopupProps";
 import { getAddChartPopupState } from "../../../redux/reducers/popupsReducer";
-import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser/SimulationDataBrowser";
-import NumericFormat from "../../NumericFormat/NumericFormat";
-import CustomCheckbox from "../../Checkbox/Checkbox";
+import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser";
+import NumericFormat from "../../NumericFormat";
+import CustomCheckbox from "../../Checkbox";
 import { WidgetParameter } from "../../../types/addWidget";
 import { getSessionInformation, getSimulationHyrarchy } from "../../../redux/reducers/simulationReducer";
 import { fetchSimulationHyrarchyServer } from "../../../redux/actions/simulationActions";
 import { Model, SimulationDataHyrarchy } from "../../../types/simulations";
-import MultiSelect from "../../MultiSelect/MultiSelect";
+import MultiSelect from "../../MultiSelect";
 
 const headers: Header[] = [
   {

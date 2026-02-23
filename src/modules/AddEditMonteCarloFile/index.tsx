@@ -14,14 +14,14 @@ import {
   getIsMonteCarloFilesLoading,
   getMonteCarloFileValidationErrors,
 } from "../../redux/reducers/monteCarloFilesReducer";
-import Alert, { AlertVariant } from "../../components/Alert/Alert";
-import Seo from "../../components/Seo/Seo";
-import Input from "../../components/Inputs/Input";
+import Alert, { AlertVariant } from "../../components/Alert";
+import Seo from "../../components/Seo";
+import Input from "../../components/Inputs";
 import withSimulation from "../../hocs/withSimulation";
-import Container from "../../components/WidgetContainer/WidgetContainer";
+import Container from "../../components/WidgetContainer";
 import ActionButtonsBlock from "../AddEditCustomView/components/ActionButtonsBlock";
 import Select from "../../components/Select";
-import PageLoader from "../../components/PageLoader/PageLoader";
+import PageLoader from "../../components/PageLoader";
 
 interface IMainContainer {
   title: string;

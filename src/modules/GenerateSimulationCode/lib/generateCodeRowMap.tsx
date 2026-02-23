@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { NavigateFunction } from "react-router";
 import { Checkbox, Tooltip } from "@mui/material";
 
-import { Filter, Row } from "../../../components/Tables/CheckboxTable/CheckboxTable";
+import { Row } from "../../../components/Tables/CheckboxTable";
 import { pages } from "../../../lib/routeUtils";
 import { Simulation, SimulationEnumType } from "../../../types/simulations";
 import FillCheckbox from "../../../components/Icons/FillCheckbox";

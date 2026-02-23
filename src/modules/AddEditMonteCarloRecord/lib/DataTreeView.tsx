@@ -10,8 +10,8 @@ import TreeView from "@mui/lab/TreeView";
 import SearchIcon from "../../../components/Icons/SearchIcon";
 import IconMinus from "../../../components/Icons/IconMinus";
 import IconPlus from "../../../components/Icons/IconPlus";
-import Container from "../../../components/WidgetContainer/WidgetContainer";
-import Textfield from "../../../components/Textfield/Textfield";
+import Container from "../../../components/WidgetContainer";
+import Textfield from "../../../components/Textfield";
 
 interface IDataBrowser {
   data: any;

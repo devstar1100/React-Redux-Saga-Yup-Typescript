@@ -1,4 +1,4 @@
-import { Filter } from "../components/Tables/CheckboxTable/CheckboxTable";
+import { Filter } from "../components/Tables/CheckboxTable";
 import { Dispatch, SetStateAction } from "react";
 import { ActiveFilter, CloseBtn } from "../components/Tables/CheckboxTable/components/ActiveFilter";
 

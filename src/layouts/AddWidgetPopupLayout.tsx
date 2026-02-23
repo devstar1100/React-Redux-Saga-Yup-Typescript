@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, BoxProps, Grid, GridProps, styled } from "@mui/material";
-import Button from "../components/Button/Button";
+import Button from "../components/Button";
 
 interface Props {
   title: string;

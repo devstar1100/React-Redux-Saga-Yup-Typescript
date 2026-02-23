@@ -2,16 +2,16 @@ import { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Typography, styled } from "@mui/material";
 
-import Input from "../../Inputs/Input";
+import Input from "../../Inputs";
 import withAddWidget, { WidgetUnit } from "../../../hocs/withAddWidget";
-import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable/ReorderTable";
+import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable";
 import { Popups } from "../../../types/popups";
 import { DisplayElementButtonType, DisplayElementType, MapIconType } from "../../../types/customViews";
 import { AddWidgetPopupProps } from "../../../types/addWidgetPopupProps";
 import { getAddButtonPopupState } from "../../../redux/reducers/popupsReducer";
 import { getTheme } from "../../../lib/theme/theme";
 import Select from "../../Select";
-import NumericFormat from "../../NumericFormat/NumericFormat";
+import NumericFormat from "../../NumericFormat";
 import { getIconByType } from "../../../lib/getIconByType";
 import { ButtonUnit } from "../../../types/addWidget";
 import {

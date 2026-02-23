@@ -1,20 +1,20 @@
 import { Box, Typography, styled } from "@mui/material";
 
-import Input from "../../Inputs/Input";
+import Input from "../../Inputs";
 import Select from "../../Select";
 import SearchIcon from "../../Icons/SearchIcon";
-import CustomCheckbox from "../../Checkbox/Checkbox";
-import NumericFormat from "../../NumericFormat/NumericFormat";
-import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable/ReorderTable";
+import CustomCheckbox from "../../Checkbox";
+import NumericFormat from "../../NumericFormat";
+import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable";
 import withAddWidget, { FilterOption, WidgetGeneralVars, WidgetUnit } from "../../../hocs/withAddWidget";
 import { Popups } from "../../../types/popups";
 import { getTheme } from "../../../lib/theme/theme";
 import { DisplayElementType, MapIconType } from "../../../types/customViews";
 import { AddWidgetPopupProps } from "../../../types/addWidgetPopupProps";
 import { getAddMapPopupState } from "../../../redux/reducers/popupsReducer";
-import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser/SimulationDataBrowser";
+import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser";
 import { WidgetParameter } from "../../../types/addWidget";
-import MultiSelect from "../../MultiSelect/MultiSelect";
+import MultiSelect from "../../MultiSelect";
 
 const headers: Header[] = [
   {

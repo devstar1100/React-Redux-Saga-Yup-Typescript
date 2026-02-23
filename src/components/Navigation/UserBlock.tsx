@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import Avatar from "../Avatar/Avatar";
+import Avatar from "../Avatar";
 import { FC, ReactElement } from "react";
 
 interface IUserBlock {

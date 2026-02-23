@@ -1,17 +1,17 @@
 import { Box, Typography, styled } from "@mui/material";
 
-import Input from "../../Inputs/Input";
+import Input from "../../Inputs";
 import Select from "../../Select";
 import SearchIcon from "../../Icons/SearchIcon";
 import withAddWidget, { WidgetUnit } from "../../../hocs/withAddWidget";
-import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser/SimulationDataBrowser";
-import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable/ReorderTable";
+import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser";
+import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable";
 import { Popups } from "../../../types/popups";
 import { getTheme } from "../../../lib/theme/theme";
 import { DisplayElementType } from "../../../types/customViews";
 import { AddWidgetPopupProps } from "../../../types/addWidgetPopupProps";
 import { getAddGaugePopupState } from "../../../redux/reducers/popupsReducer";
-import MultiSelect from "../../MultiSelect/MultiSelect";
+import MultiSelect from "../../MultiSelect";
 
 interface FilterOption {
   placeholder: string;

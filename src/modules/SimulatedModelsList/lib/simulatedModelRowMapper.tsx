@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { NavigateFunction } from "react-router";
 
-import { Row } from "../../../components/Tables/CheckboxTable/CheckboxTable";
+import { Row } from "../../../components/Tables/CheckboxTable";
 import { SimulatedModel } from "../../../types/SimulatedModel";
 import { SimulationEnumType } from "../../../types/simulations";
 import { pages } from "../../../lib/routeUtils";

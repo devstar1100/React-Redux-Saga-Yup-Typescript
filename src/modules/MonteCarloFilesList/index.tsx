@@ -14,12 +14,12 @@ import { getCurrentMonteCarloFiles, getIsMonteCarloFilesLoading } from "../../re
 import { MonteCarloFile } from "../../types/monteCarloFile";
 import { formatMonteCarloFileRow } from "./lib/rowMapper";
 import withSimulation from "../../hocs/withSimulation";
-import Input from "../../components/Inputs/Input";
-import Button from "../../components/Button/Button";
-import TableFilter from "../../components/TableFilter/TableFilter";
+import Input from "../../components/Inputs";
+import Button from "../../components/Button";
+import TableFilter from "../../components/TableFilter";
 import SearchIcon from "../../components/Icons/SearchIcon";
-import PageLoader from "../../components/PageLoader/PageLoader";
-import CheckboxTable, { Filter, Header, Row, Sort } from "../../components/Tables/CheckboxTable/CheckboxTable";
+import PageLoader from "../../components/PageLoader";
+import CheckboxTable, { Filter, Header, Row, Sort } from "../../components/Tables/CheckboxTable";
 
 interface FilterVariantValue {
   text: string;

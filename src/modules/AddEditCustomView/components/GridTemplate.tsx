@@ -5,7 +5,7 @@ import IconDone from "../../../components/Icons/IconDone";
 import { getGridTemplateTitleByName } from "../../../lib/getGridTemplateTitleByName";
 import { GridTemplateName } from "../../../types/customViews";
 import { getAreGridTemplatesLoading, getCustomViewGridTemplates } from "../../../redux/reducers/customViewsReducer";
-import WidgetLoader from "../../../components/WidgetLoader/WidgetLoader";
+import WidgetLoader from "../../../components/WidgetLoader";
 
 interface Props {
   value: number;

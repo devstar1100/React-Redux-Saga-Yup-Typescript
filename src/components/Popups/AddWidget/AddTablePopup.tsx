@@ -1,17 +1,17 @@
 import { Box, Typography, styled } from "@mui/material";
 
-import Input from "../../Inputs/Input";
+import Input from "../../Inputs";
 import Select from "../../Select";
 import SearchIcon from "../../Icons/SearchIcon";
 import withAddWidget, { FilterOption, WidgetUnit } from "../../../hocs/withAddWidget";
-import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable/ReorderTable";
+import ReoderTable, { Header, ReorderTableRow } from "../../Tables/ReorderTable";
 import { Popups } from "../../../types/popups";
 import { getTheme } from "../../../lib/theme/theme";
 import { DisplayElementType } from "../../../types/customViews";
 import { AddWidgetPopupProps } from "../../../types/addWidgetPopupProps";
 import { getAddTablePopupState } from "../../../redux/reducers/popupsReducer";
-import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser/SimulationDataBrowser";
-import MultiSelect from "../../MultiSelect/MultiSelect";
+import { SimulationDataBrowser } from "../../../modules/SimulationDataBrowser";
+import MultiSelect from "../../MultiSelect";
 
 const headers: Header[] = [
   {

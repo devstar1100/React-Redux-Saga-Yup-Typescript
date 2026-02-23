@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
-import Textfield from "../Textfield/Textfield";
+import Textfield from "../Textfield";
 import InputIcon from "../Icons/InputIcon";
 
 interface Props {

@@ -169,7 +169,12 @@ const MonteCarloBach = () => {
     <Wrapper>
       <TableHeader>
         <SearchWrapper>
-          <Input placeholder="Search configuration" value={searchValue} handleChange={handleChange} fullWidth />
+          <Input
+            placeholder="Search simulation name and run prefix"
+            value={searchValue}
+            handleChange={handleChange}
+            fullWidth
+          />
           <SearchIcon />
         </SearchWrapper>
         <AddConfigurationWrapper>

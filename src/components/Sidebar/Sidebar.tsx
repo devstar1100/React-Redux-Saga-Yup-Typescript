@@ -210,7 +210,7 @@ const getSidebarElements = ({
       },
       {
         id: "monteCarlo-batch",
-        title: "Monte Carlo Batches",
+        title: "Monte Carlo Batches Configure",
         link: "/monte-carlo-batches-config",
         isSelected: [pages.monteCarloBatch(), pages.createMonteCarloBatch(), pages.editMonteCarloBatch()].includes(
           currentRoute,

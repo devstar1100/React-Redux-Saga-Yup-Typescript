@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { FC, ReactElement, useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getSimulationsExtendedInfoServer, getSpecificEnumeratorServer } from "../../redux/actions/simulationsActions";
-import { getSimulations } from "../../redux/reducers/simulationsReducer";
+import { getEnumerators, getSimulations } from "../../redux/reducers/simulationsReducer";
 import { WidgetUnit, generateWidgetUnitId } from "../../hocs/withAddWidget";
 import { DropResult } from "react-beautiful-dnd";
 import { DataBrowserFilters } from "../../types/dataBrowserFilters";
@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 import { Model, ModelDataItem, SimulationSessionActionType, System } from "../../types/simulations";
 import { getSessionInformation, getSimulationHyrarchy } from "../../redux/reducers/simulationReducer";
 import { Breadcrumbs, BreadcrumbsItem } from "../../components/Breadcrumbs";
-import { updateMonteCarloBatchValidationErrors } from "../../redux/actions/monteCarloBatchActions";
 import {
   getMonteCarloRecordsServer,
   manageMonteCarloRecordServer,
@@ -80,6 +79,7 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
   const [units, setUnits] = useState<WidgetUnit[]>([]);
   const [selectedUnitId, setSelectedUnitId] = useState<string>("");
   const [filters, setFilters] = useState<DataBrowserFilters>(initialFilters);
+  const types = useSelector(getEnumerators);
 
   const batchRecords = useSelector(getCurrentMonteCarloRecords);
   const simulations = useSelector(getSimulations);
@@ -87,8 +87,17 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
   const sessionId = sessionInfo?.["simulation-session-id"];
   const simulationHierarchy = useSelector(getSimulationHyrarchy);
   const systems = (simulationHierarchy?.["simulation-systems"] || []) as System[];
-
   const batchRecordValidationErrors = useSelector(getMonteCarloRecordValidationErrors);
+
+  const recordTypeOptions = useMemo(
+    () =>
+      types?.[0]?.["enum-values"]?.map((item) => ({
+        id: item["enum-value-id"],
+        label: item["enum-value-string"],
+      })) ?? [],
+    [types],
+  );
+
   const currentBatchRecord = useMemo(
     () => batchRecords.find((item) => item.description === description),
     [batchRecords, description],
@@ -98,10 +107,6 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
     () => simulations.find((item) => item["simulation-id"] === Number(simulationId)),
     [simulations],
   );
-  const recordTypeOptions = [
-    { id: 9, label: "RANDOMIZED_INPUT" },
-    { id: 10, label: "SELECTED_OUTPUT" },
-  ];
 
   const [formData, setFormData] = useState<FormData>({
     recordTypeId: 0,
@@ -112,11 +117,8 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
   });
 
   const [formError, setFormError] = useState<Record<string, string>>({
-    "record-type": "",
+    recordTypeId: "",
     description: "",
-    "parameter-value": "",
-    "parameter-stddev": "",
-    "parameter-path": "",
   });
 
   const handleInputChange = (key: keyof FormData) => (e: any) => {
@@ -137,8 +139,8 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
 
   const validation = (name: string, value: string | number) => {
     switch (name) {
-      case "recordType": {
-        if (!value) return "Record Type is required.";
+      case "recordTypeId": {
+        if (value === 0) return "error";
         return "";
       }
       case "description": {
@@ -253,12 +255,16 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
   };
 
   useEffect(() => {
-    if (simulationId && filename && currentBatchRecord && currentSimulation && recordTypeOptions) {
-      const recordTypeId = recordTypeOptions.find((item) => item.label === currentBatchRecord["record-type"]);
+    if (simulationId && filename && currentBatchRecord && currentSimulation && recordTypeOptions.length) {
+      const recordTypeId = recordTypeOptions.find(
+        (item) =>
+          item["label"].toLowerCase().indexOf(currentBatchRecord["record-type"].toLowerCase().split("_")[0]) == 0,
+      );
+
       if (recordTypeId) {
         setFormData({
           ...formData,
-          recordTypeId: recordTypeId?.id,
+          recordTypeId: recordTypeId["id"],
           description: currentBatchRecord.description,
           filename: filename,
           simulationId: Number(simulationId),
@@ -276,10 +282,10 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
       ];
       setUnits(units);
     }
-  }, [batchRecords, currentSimulation]);
+  }, [batchRecords, currentSimulation, recordTypeOptions.length]);
 
   useEffect(() => {
-    dispatch(updateMonteCarloBatchValidationErrors([]));
+    dispatch(updateMonteCarloRecordValidationErrors([]));
     if (sessionId)
       dispatch(
         runSimulationSessionActionServer({
@@ -293,10 +299,6 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
       dispatch(getSimulationsExtendedInfoServer({ "simulation-id": Number(simulationId) }));
       dispatch(getSpecificEnumeratorServer({ "enum-type": "monte-carlo-input-output-record-type" }));
     }
-  }, []);
-
-  useEffect(() => {
-    dispatch(updateMonteCarloRecordValidationErrors([]));
     if (!isEditMode) {
       const units = [
         {
@@ -310,10 +312,6 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
     }
   }, []);
 
-  const handleCancel = () => {
-    navigate(`${pages.monteCarloRecords()}/${simulationId}/${filename}`);
-  };
-
   useEffect(() => {
     if (batchRecordValidationErrors.length) {
       batchRecordValidationErrors.forEach((item) => {
@@ -325,10 +323,15 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
     }
   }, [batchRecordValidationErrors]);
 
-  const handleSubmit = () => {
-    const isValid = Object.values(formError).every((error) => error === "");
+  const handleCancel = () => {
+    navigate(`${pages.monteCarloRecords()}/${simulationId}/${filename}`);
+  };
 
-    if (isValid) {
+  const handleSubmit = () => {
+    const recordTypeIdError = validation("recordTypeId", formData.recordTypeId);
+    const descriptionError = validation("description", formData.description);
+
+    if (!recordTypeIdError && !descriptionError) {
       dispatch(
         manageMonteCarloRecordServer({
           "new-description": formData.description,
@@ -343,6 +346,8 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
           redirect: () => navigate(`${pages.monteCarloRecords()}/${simulationId}/${filename}`),
         }),
       );
+    } else {
+      setFormError({ ...formError, recordTypeId: recordTypeIdError, description: descriptionError });
     }
   };
 
@@ -380,30 +385,38 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
               value={formData.recordTypeId}
               onChange={handleSelectChange("recordTypeId")}
               options={recordTypeOptions}
+              error={formError.recordTypeId === "error"}
             />
           }
         />
 
-        <MainContainer
-          key="key"
-          requireField={true}
-          title="Key"
-          content={
-            <Input
-              error={!!formError.description}
-              helperText={formError.description}
-              placeholder={"Enter key"}
-              value={formData.description}
-              handleChange={handleInputChange("description")}
-            />
-          }
-        />
+        {!isEditMode && (
+          <MainContainer
+            key="key"
+            requireField={true}
+            title="Key"
+            content={
+              <Input
+                error={!!formError.description}
+                helperText={formError.description}
+                placeholder={"Enter key"}
+                value={formData.description}
+                handleChange={handleInputChange("description")}
+              />
+            }
+          />
+        )}
 
         <MainContainer
           key="modified-parameters"
           title="Additional Information"
           content={
             <Grid container gap="4px" direction="column">
+              {isEditMode && (
+                <Typography variant="body2" color="main.100">
+                  Key: {formData.description}
+                </Typography>
+              )}
               <Typography variant="body2" color="main.100">
                 File Name: {filename}
               </Typography>
@@ -441,6 +454,8 @@ const AddEditMonteCarloRecord: FC<Props> = ({ isEditMode = false }: Props) => {
             </Box>
           </>
         )}
+        <Wrapper className="customHeading"></Wrapper>
+
         {Number.isNaN(Number(sessionId)) && (
           <Alert
             title="Simulation session is not running, data browser is unavailable. Launch a simulation if you want to use data browser"
@@ -483,7 +498,7 @@ const Wrapper = styled(Grid)(({ theme }) => ({
     padding: "24px 24px 16px 24px",
   },
   ".MuiInputBase-root": {
-    width: "500px !important",
+    width: "250px !important",
   },
   ".customMainContainer:first-of-type": {
     padding: "0 0 4px 0",
@@ -507,7 +522,6 @@ const Wrapper = styled(Grid)(({ theme }) => ({
     backgroundColor: "#1F1F22",
 
     ".MuiInputBase-root": {
-      width: "222px !important",
       border: "1px solid transparent !important",
       h6: {
         fontSize: "14px",
@@ -518,7 +532,7 @@ const Wrapper = styled(Grid)(({ theme }) => ({
   },
   "@media(max-width: 1200px)": {
     ".MuiInputBase-root": {
-      width: "385px !important",
+      width: "222px !important",
       ".MuiInputBase-input": {
         padding: "6px",
         fontSize: "12px",

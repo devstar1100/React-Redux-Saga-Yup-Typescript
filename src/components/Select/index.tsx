@@ -104,7 +104,6 @@ const Item = styled(MenuItem)(({ theme }) => ({
 
 const Form = styled(FormControl)(({ theme }) => ({
   maxWidth: "320px",
-  minWidth: "250px !important",
   position: "relative",
   borderRadius: theme.borderRadius.xs,
   backgroundColor: theme.palette.additional[700],

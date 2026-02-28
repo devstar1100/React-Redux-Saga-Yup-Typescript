@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,8 @@ import TableFilter from "../../components/TableFilter";
 import SearchIcon from "../../components/Icons/SearchIcon";
 import PageLoader from "../../components/PageLoader";
 import ArrowDownIcon from "../../components/Icons/ArrowDownIcon";
+import { getSpecificEnumeratorServer } from "../../redux/actions/simulationsActions";
+import { getEnumerators } from "../../redux/reducers/simulationsReducer";
 
 interface FilterVariantValue {
   text: string;
@@ -41,6 +43,7 @@ const MonteCarloRecordsList = () => {
 
   const monteCarloRecordsServerLoading = useSelector(getIsMonteCarloRecordsLoading);
   const monteCarloRecordsServer: MonteCarloRecord[] = useSelector(getCurrentMonteCarloRecords);
+  const types = useSelector(getEnumerators);
 
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>("");
@@ -123,6 +126,7 @@ const MonteCarloRecordsList = () => {
   };
 
   useEffect(() => {
+    dispatch(getSpecificEnumeratorServer({ "enum-type": "monte-carlo-input-output-record-type" }));
     dispatch(
       getMonteCarloRecordsServer({
         simulationId: Number(simulationId),
@@ -132,14 +136,22 @@ const MonteCarloRecordsList = () => {
   }, [simulationId, filename]);
 
   useEffect(() => {
-    if (simulationId && filename) {
-      const rows: Row[] = formatMonteCarloRecordsRow(monteCarloRecordsServer, navigate, simulationId, filename);
+    if (simulationId && filename && types.length) {
+      const recordTypes = types[0]["enum-values"];
+
+      const newMonteCarloRecordsServer: MonteCarloRecord[] = monteCarloRecordsServer.map((item) => {
+        const newRecordType = recordTypes.find(
+          (type) =>
+            type["enum-value-string"].toLocaleLowerCase().indexOf(item["record-type"].toLowerCase().split("_")[0]) == 0,
+        );
+        if (newRecordType) return { ...item, "record-type": newRecordType["enum-value-string"] };
+        else return item;
+      });
+      const rows: Row[] = formatMonteCarloRecordsRow(newMonteCarloRecordsServer, navigate, simulationId, filename);
       setRows(rows);
-      const recordTypes = monteCarloRecordsServer.map((item) => item["record-type"]);
-      const simulationNameVariants = recordTypes.filter((value, index, self) => self.indexOf(value) === index);
-      const newValues = simulationNameVariants.map((item) => ({
-        text: item,
-        value: item,
+      const newValues = recordTypes.map((item) => ({
+        text: String(item["enum-value-id"]),
+        value: item["enum-value-string"],
       }));
       setFilterVariants({
         recordTypeVariants: {
@@ -147,7 +159,7 @@ const MonteCarloRecordsList = () => {
         },
       });
     }
-  }, [monteCarloRecordsServer]);
+  }, [monteCarloRecordsServer, types]);
 
   return (
     <Wrapper>
@@ -239,19 +251,19 @@ const headers: Header[] = [
     text: "Record Type",
     align: "center",
     filterable: false,
-    width: 14,
+    width: 30,
   },
   {
     text: "Key",
     align: "center",
     filterable: true,
-    width: 40,
+    width: 14,
   },
   {
     text: "Parameter path",
     align: "center",
     filterable: true,
-    width: 14,
+    width: 24,
   },
   {
     text: "Parameter value",

@@ -4,6 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 
 import DataTableRow, { IDataTableRow } from "./DataTableRow";
+import { width } from "@mui/system";
 
 interface IDataTable {
   data: IDataTableRow[];
@@ -39,6 +40,7 @@ const CustomTable = styled(Table)(({ theme }) => ({
     ".MuiTableCell-root": {
       borderBottom: `1px solid ${theme.palette.table.tableBorder}`,
       padding: "13px 0",
+      width: "50%",
       fontSize: theme.typography.body2.fontSize,
       fontWeight: theme.typography.body2.fontWeight,
       lineHeight: theme.typography.body2.lineHeight,

@@ -146,7 +146,7 @@ const AddEditMonteCarloFile = ({ isEditMode = false }: Props) => {
     if (isValid) {
       dispatch(
         manageMonteCarloFileServer({
-          "simulation-id": Number(simulationId),
+          "simulation-id": isEditMode ? Number(simulationId) : (formData.simulationId as number),
           "file-name": isEditMode ? (filename as string) : (formData.filename as string),
           "action-type": isEditMode ? "edit" : "add",
           "new-simulation-id": formData.simulationId as number,
